@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  influxdb:
+    image: influxdb:2.0.8
+    environment:
+      INFLUXDB_DB: ${INFLUXDB_DB}
+      INFLUXDB_USER: ${INFLUXDB_USER}
+      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+    ports:
+      - ${INFLUXDB_PORT}:8086
