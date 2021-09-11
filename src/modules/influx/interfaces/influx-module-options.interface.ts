@@ -1,1 +1,3 @@
-export interface IInfluxModuleOptions {}
+import { ISingleHostConfig } from 'influx'
+
+export type IInfluxModuleOptions = ISingleHostConfig

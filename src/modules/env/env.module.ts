@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common'
+import { DynamicModule, Global, Module } from '@nestjs/common'
 import { Logger } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 
@@ -10,12 +10,12 @@ import { IEnvModuleOptions } from './interfaces/env-module-options.interface'
 import { plainToClass } from 'class-transformer'
 import { validateSync } from 'class-validator'
 
+@Global()
 @Module({})
 export class EnvModule {
   static forRoot(options?: IEnvModuleOptions): DynamicModule {
     return {
       module: EnvModule,
-      global: options.isGlobal ?? true,
       imports: [
         ConfigModule.forRoot({
           ...options,
