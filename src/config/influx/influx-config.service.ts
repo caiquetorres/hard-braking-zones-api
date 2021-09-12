@@ -25,6 +25,8 @@ export class InfluxConfigService implements IInfluxOptionsFactory {
           fields: {
             deviceId: FieldType.STRING,
             velocity: FieldType.FLOAT,
+            latitude: FieldType.STRING,
+            longitude: FieldType.STRING,
           },
         },
       ],
