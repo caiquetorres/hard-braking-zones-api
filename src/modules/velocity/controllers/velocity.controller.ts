@@ -4,17 +4,19 @@ import { CreateVelocityDto } from '../dtos/create-velocity.dto'
 
 import { VelocityService } from '../services/velocity.service'
 
+import { Observable } from 'rxjs'
+
 @Controller('velocity')
 export class VelocityController {
   constructor(private readonly velocityService: VelocityService) {}
 
   @Post()
-  async createOne(@Body() payload: CreateVelocityDto): Promise<void> {
-    await this.velocityService.createOne(payload)
+  createOne(@Body() payload: CreateVelocityDto): Observable<void> {
+    return this.velocityService.createOne(payload)
   }
 
   @Post('bulk')
-  async createMany(@Body() payload: CreateVelocityDto[]): Promise<void> {
-    await this.velocityService.createMany(payload)
+  createMany(@Body() payload: CreateVelocityDto[]): Observable<void> {
+    return this.velocityService.createMany(payload)
   }
 }

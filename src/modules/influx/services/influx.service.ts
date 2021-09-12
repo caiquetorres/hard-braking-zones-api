@@ -119,7 +119,7 @@ export class InfluxService {
       } else if (typeof value[key] === 'string') {
         point.stringField(key, value[key])
       } else {
-        throw new BadRequestException('Data type no valid.')
+        throw new BadRequestException('Data type not valid.')
       }
     }
     return point
