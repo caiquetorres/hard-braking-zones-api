@@ -1,3 +1,3 @@
-import { ISingleHostConfig } from 'influx'
+import { ClientOptions } from '@influxdata/influxdb-client'
 
-export type IInfluxModuleOptions = ISingleHostConfig
+export type IInfluxModuleOptions = ClientOptions

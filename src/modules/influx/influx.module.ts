@@ -1,14 +1,17 @@
+import { HttpModule } from '@nestjs/axios'
 import { DynamicModule, Global, Module, Provider } from '@nestjs/common'
 
 import { InfluxService } from './services/influx.service'
 
 import { InfluxOptionsConstant } from './constants/module.constant'
 import { IInfluxAsyncOptions as IInfluxAsyncModuleOptions } from './interfaces/influx-async-module-options.interface'
+import { IInfluxModuleOptionsFactory } from './interfaces/influx-module-options-factory.interface'
 import { IInfluxModuleOptions } from './interfaces/influx-module-options.interface'
-import { IInfluxOptionsFactory } from './interfaces/influx-options-factory.interface'
 
 @Global()
-@Module({})
+@Module({
+  imports: [HttpModule],
+})
 export class InfluxModule {
   static forRoot(options?: IInfluxModuleOptions): DynamicModule {
     return {
@@ -57,7 +60,7 @@ export class InfluxModule {
         {
           provide: InfluxOptionsConstant,
           useFactory: async (
-            optionsFactory: IInfluxOptionsFactory,
+            optionsFactory: IInfluxModuleOptionsFactory,
           ): Promise<IInfluxModuleOptions> =>
             optionsFactory.createInfluxOptions(),
           inject: [options.useExisting || options.useClass],

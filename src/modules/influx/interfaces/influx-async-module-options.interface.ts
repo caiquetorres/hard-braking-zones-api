@@ -1,11 +1,11 @@
 import { ModuleMetadata, Type } from '@nestjs/common'
 
+import { IInfluxModuleOptionsFactory } from './influx-module-options-factory.interface'
 import { IInfluxModuleOptions } from './influx-module-options.interface'
-import { IInfluxOptionsFactory } from './influx-options-factory.interface'
 
 export interface IInfluxAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-  useExisting?: Type<IInfluxOptionsFactory>
-  useClass?: Type<IInfluxOptionsFactory>
+  useExisting?: Type<IInfluxModuleOptionsFactory>
+  useClass?: Type<IInfluxModuleOptionsFactory>
   useFactory?(...args: unknown[]): IInfluxModuleOptions
   inject?: Type<unknown>[]
 }

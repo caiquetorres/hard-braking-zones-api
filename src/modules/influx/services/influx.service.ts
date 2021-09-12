@@ -1,8 +1,12 @@
-import { Inject, Injectable, Logger } from '@nestjs/common'
+import { HttpService } from '@nestjs/axios'
+import { BadRequestException, Inject, Injectable, Logger } from '@nestjs/common'
+
+import { EnvService } from '../../env/services/env.service'
 
 import { InfluxOptionsConstant } from '../constants/module.constant'
 import { IInfluxModuleOptions } from '../interfaces/influx-module-options.interface'
-import { InfluxDB } from 'influx'
+import { InfluxDB, Point } from '@influxdata/influxdb-client'
+import { lastValueFrom } from 'rxjs'
 
 @Injectable()
 export class InfluxService {
@@ -12,48 +16,64 @@ export class InfluxService {
   constructor(
     @Inject(InfluxOptionsConstant)
     influxModuleOptions: IInfluxModuleOptions,
+    private readonly httpService: HttpService,
+    private readonly envService: EnvService,
   ) {
     this.influx = new InfluxDB(influxModuleOptions)
     this.ping()
   }
 
-  async ping(): Promise<void> {
-    const hosts = await this.influx.ping(2000)
+  async createOne<T>(value: T): Promise<void> {
+    const writeApi = this.influx.getWriteApi(
+      this.envService.get('INFLUXDB_ORG'),
+      this.envService.get('INFLUXDB_BUCKET'),
+    )
 
-    if (hosts.some((host) => host.online)) {
-      return
-    }
+    writeApi.writePoint(this.createPoint(value))
 
-    this.logger.error('Unable to connect to the database')
-    await this.sleep(2000)
-    this.ping()
+    await writeApi.close()
   }
 
-  async createOne<T>(value: T): Promise<T> {
-    await this.influx.writePoints([
-      {
-        measurement: 'response_time',
-        tags: {
-          host: 'localhost',
-        },
-        fields: {
-          ...value,
-        },
-      },
-    ])
-    return value
-  }
-
-  async createMany<T>(values: T[]): Promise<T[]> {
+  async createMany<T>(values: T[]): Promise<void> {
     const response = values.map((value) => this.createOne(value))
-    return Promise.all(response)
+    await Promise.all(response)
   }
 
-  async getMany<T>(): Promise<T[]> {
-    return await this.influx.query(`select * from "response_time"`)
+  async query<T>(query: string): Promise<T[]> {
+    return this.influx
+      .getQueryApi(this.envService.get('INFLUXDB_ORG'))
+      .collectRows<T>(query)
+  }
+
+  private async ping(): Promise<void> {
+    try {
+      await lastValueFrom(
+        this.httpService.get<void>(this.envService.get('INFLUXDB_URL')),
+      )
+    } catch (err) {
+      this.logger.error('Unable to connect to the database')
+      await this.sleep(2000)
+      this.ping()
+    }
   }
 
   private async sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
+  private createPoint(value: any): Point {
+    const point = new Point(this.envService.get('INFLUXDB_MEASUREMENT_NAME'))
+    for (const key in value) {
+      if (typeof value[key] === 'boolean') {
+        point.booleanField(key, value[key])
+      } else if (typeof value[key] === 'number') {
+        point.floatField(key, value[key])
+      } else if (typeof value[key] === 'string') {
+        point.stringField(key, value[key])
+      } else {
+        throw new BadRequestException('Data type no valid.')
+      }
+    }
+    return point
   }
 }

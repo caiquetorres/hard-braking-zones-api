@@ -1,5 +1,5 @@
 import { IInfluxModuleOptions } from './influx-module-options.interface'
 
-export interface IInfluxOptionsFactory {
+export interface IInfluxModuleOptionsFactory {
   createInfluxOptions(): IInfluxModuleOptions | Promise<IInfluxModuleOptions>
 }
