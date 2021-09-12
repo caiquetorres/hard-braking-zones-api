@@ -6,11 +6,32 @@ import { EnvService } from '../../env/services/env.service'
 import { InfluxOptionsConstant } from '../constants/module.constant'
 import { IInfluxModuleOptions } from '../interfaces/influx-module-options.interface'
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
-import { lastValueFrom } from 'rxjs'
+import {
+  catchError,
+  concat,
+  concatAll,
+  delay,
+  from,
+  map,
+  Observable,
+  of,
+} from 'rxjs'
 
+/**
+ * Service that deals with the InfluxDB connection, writing and quering
+ * behaviours.
+ */
 @Injectable()
 export class InfluxService {
+  /**
+   * Property that defines an object that represents the influx client.
+   */
   private readonly influx: InfluxDB
+
+  /**
+   * Property that defines an object that represents the logger instance
+   * used to log strings or objects related with this service.
+   */
   private readonly logger = new Logger(InfluxService.name)
 
   constructor(
@@ -20,47 +41,74 @@ export class InfluxService {
     private readonly envService: EnvService,
   ) {
     this.influx = new InfluxDB(influxModuleOptions)
-    this.ping()
+    this.ping().subscribe()
   }
 
-  async createOne<T>(value: T): Promise<void> {
+  /**
+   * Method that saves a new point in the influx database.
+   *
+   * @param value defines the new point data.
+   * @returns an observable related to the created point.
+   */
+  createOne<T>(value: T): Observable<void> {
     const writeApi = this.influx.getWriteApi(
       this.envService.get('INFLUXDB_ORG'),
       this.envService.get('INFLUXDB_BUCKET'),
     )
-
     writeApi.writePoint(this.createPoint(value))
-
-    await writeApi.close()
+    return from(writeApi.close())
   }
 
-  async createMany<T>(values: T[]): Promise<void> {
-    const response = values.map((value) => this.createOne(value))
-    await Promise.all(response)
+  /**
+   * Method that saves several new points in the influx database.
+   *
+   * @param values defines an array of objects that represents the new
+   * point datas.
+   * @returns an observable related to the created points.
+   */
+  createMany<T>(values: T[]): Observable<void> {
+    return concat(...values.map((value) => this.createOne(value)))
   }
 
-  async query<T>(query: string): Promise<T[]> {
-    return this.influx
-      .getQueryApi(this.envService.get('INFLUXDB_ORG'))
-      .collectRows<T>(query)
+  /**
+   * Method that query for data in the influx database.
+   *
+   * @param query defines a string the represents the `Flux Query`
+   * @returns an observable related to the found data.
+   */
+  query<T>(query: string): Observable<T[]> {
+    return from(
+      this.influx
+        .getQueryApi(this.envService.get('INFLUXDB_ORG'))
+        .collectRows<T>(query),
+    )
   }
 
-  private async ping(): Promise<void> {
-    try {
-      await lastValueFrom(
-        this.httpService.get<void>(this.envService.get('INFLUXDB_URL')),
-      )
-    } catch (err) {
-      this.logger.error('Unable to connect to the database')
-      await this.sleep(2000)
-      this.ping()
-    }
+  /**
+   * Method that pings the influx database to test it connection
+   *
+   * @returns an observable related to the ping result.
+   */
+  private ping(): Observable<void> {
+    return this.httpService.get<void>(this.envService.get('INFLUXDB_URL')).pipe(
+      map(() => void 0),
+      catchError((err) => {
+        this.logger.error('Unable to connect to the Influx database', err)
+        return of(null).pipe(
+          delay(2000),
+          map(() => this.ping()),
+          concatAll(),
+        )
+      }),
+    )
   }
 
-  private async sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms))
-  }
-
+  /**
+   * Method that creates a new point in the influx database.
+   *
+   * @param value defines the new poisnt data.
+   * @returns the created point.
+   */
   private createPoint(value: any): Point {
     const point = new Point(this.envService.get('INFLUXDB_MEASUREMENT_NAME'))
     for (const key in value) {
