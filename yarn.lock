@@ -546,6 +546,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
+"@influxdata/influxdb-client@^1.17.0":
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/@influxdata/influxdb-client/-/influxdb-client-1.17.0.tgz#5017b9e7eec6d514819ddaab0d1eabdad29688dd"
+  integrity sha512-2DhoQDQjhVR2iL6BHRPsBRxelk1AFLyl7huQTp5wgapTEaE/zKdy2BUAzoLDAyZiGoZfEtjDWDkZMdMwEbbC9Q==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -741,6 +746,13 @@
     "@types/node" "*"
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
+
+"@nestjs/axios@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/axios/-/axios-0.0.1.tgz#c32a1c11e25765a69f3f9012ea5b8f49915db7cb"
+  integrity sha512-6H06VmDp5mmjjjLgglEdtzwtmli5pz5UdcY7E9v5SPoz5KeM4uLQvOF5ZJ1S/R4wub0WAqXUQL8mwuXxdjKIQQ==
+  dependencies:
+    axios "0.21.1"
 
 "@nestjs/cli@^8.0.0":
   version "8.1.1"
