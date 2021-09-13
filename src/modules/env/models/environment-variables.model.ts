@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDefined,
   IsIn,
   IsNumber,
@@ -76,6 +77,51 @@ export class EnvironmentVariables {
   @IsString({ message: 'It is required to set a valid string value' })
   @IsIn(['http', 'https'])
   INFLUXDB_PROTOCOL?: 'http' | 'https'
+
+  //#endregion
+
+  //#region Database
+
+  @IsDefined({ message: 'It is required to set the database type' })
+  @IsString({ message: 'It is required to send a valid string value' })
+  @IsIn(['mysql', 'postgres', 'sqlite'])
+  public DATABASE_TYPE: 'mysql' | 'postgres' | 'sqlite'
+
+  @IsOptional()
+  @IsString({ message: 'It is required to send a valid string value' })
+  public DATABASE_URL?: string
+
+  @IsOptional()
+  @IsString({ message: 'It is required to send a valid string value' })
+  public DATABASE_DATABASE?: string
+
+  @IsOptional()
+  @IsNumber({}, { message: 'It is required to send a number value' })
+  public DATABASE_PORT?: number
+
+  @IsOptional()
+  @IsString({ message: 'It is required to send a valid string value' })
+  public DATABASE_HOST?: string
+
+  @IsOptional()
+  @IsString({ message: 'It is required to send a valid string value' })
+  public DATABASE_USERNAME?: string
+
+  @IsOptional()
+  @IsString({ message: 'It is required to send a valid string value' })
+  public DATABASE_PASSWORD?: string
+
+  @IsOptional()
+  @IsBoolean({ message: 'It is required to send a boolean value' })
+  public DATABASE_SYNCHRONIZE?: boolean
+
+  @IsOptional()
+  @IsBoolean({ message: 'It is required to send a boolean value' })
+  public DATABASE_MIGRATIONS_RUN?: boolean
+
+  @IsOptional()
+  @IsBoolean({ message: 'It is required to send a boolean value' })
+  public DATABASE_SSL?: boolean
 
   //#endregion
 }
