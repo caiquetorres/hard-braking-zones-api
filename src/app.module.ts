@@ -6,6 +6,7 @@ import { HttpConfigService } from './config/http/http-config.service'
 import { InfluxConfigService } from './config/influx/influx-config.service'
 import { TypeOrmConfigService } from './config/typeorm/typeorm-config.service'
 
+import { AuthModule } from './modules/auth/auth.module'
 import { EnvModule } from './modules/env/env.module'
 import { InfluxModule } from './modules/influx/influx.module'
 import { PasswordModule } from './modules/password/password.module'
@@ -16,6 +17,7 @@ import { VelocityModule } from './modules/velocity/velocity.module'
 @Module({
   imports: [
     PasswordModule,
+    AuthModule,
     PermissionModule,
     UserModule,
     VelocityModule,
