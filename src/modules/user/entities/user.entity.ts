@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Column, Entity } from 'typeorm'
 
-import { BaseEntity } from '../../../common/base.entity'
+import { BaseEntity } from '../../../shared/base.entity'
 
 import { Exclude, Expose, Transform } from 'class-transformer'
 
