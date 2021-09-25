@@ -4,17 +4,15 @@ import { CreateVelocityDto } from '../dtos/create-velocity.dto'
 
 import { InfluxService } from '../../influx/services/influx.service'
 
-import { Observable } from 'rxjs'
-
 @Injectable()
 export class VelocityService {
   constructor(private readonly influxService: InfluxService) {}
 
-  createOne(payload: CreateVelocityDto): Observable<void> {
+  createOne(payload: CreateVelocityDto): Promise<void> {
     return this.influxService.createOne(payload)
   }
 
-  createMany(payload: CreateVelocityDto[]): Observable<void> {
+  createMany(payload: CreateVelocityDto[]): Promise<void> {
     return this.influxService.createMany(payload)
   }
 }
