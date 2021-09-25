@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common'
 import {
   ApiOkResponse,
   ApiOperation,
@@ -39,6 +39,7 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({ description: 'User is not authenticated' })
   @UseGuards(LocalGuard)
+  @HttpCode(200)
   @Post('local')
   async login(
     @Body()
@@ -62,6 +63,7 @@ export class AuthController {
   })
   @UseGuards(JwtGuard)
   @ApiUnauthorizedResponse({ description: 'User is not authenticated' })
+  @HttpCode(200)
   @Post('refresh')
   public async refresh(
     @RequestUser()
