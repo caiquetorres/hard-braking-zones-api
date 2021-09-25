@@ -9,11 +9,15 @@ import { TypeOrmConfigService } from './config/typeorm/typeorm-config.service'
 import { EnvModule } from './modules/env/env.module'
 import { InfluxModule } from './modules/influx/influx.module'
 import { PasswordModule } from './modules/password/password.module'
+import { PermissionModule } from './modules/permission/permission.module'
+import { UserModule } from './modules/user/user.module'
 import { VelocityModule } from './modules/velocity/velocity.module'
 
 @Module({
   imports: [
     PasswordModule,
+    PermissionModule,
+    UserModule,
     VelocityModule,
     EnvModule.forRoot({
       envFilePath: ['.env'],

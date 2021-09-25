@@ -6,16 +6,7 @@ import { EnvService } from '../../env/services/env.service'
 import { InfluxOptionsConstant } from '../constants/module.constant'
 import { IInfluxModuleOptions } from '../interfaces/influx-module-options.interface'
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
-import {
-  catchError,
-  concat,
-  concatAll,
-  delay,
-  from,
-  map,
-  Observable,
-  of,
-} from 'rxjs'
+import { interval, lastValueFrom } from 'rxjs'
 
 /**
  * Service that deals with the InfluxDB connection, writing and quering
@@ -41,7 +32,7 @@ export class InfluxService {
     private readonly envService: EnvService,
   ) {
     this.influx = new InfluxDB(influxModuleOptions)
-    this.ping().subscribe()
+    this.ping()
   }
 
   /**
@@ -50,13 +41,13 @@ export class InfluxService {
    * @param value defines the new point data.
    * @returns an observable related to the created point.
    */
-  createOne<T>(value: T): Observable<void> {
+  async createOne<T>(value: T): Promise<void> {
     const writeApi = this.influx.getWriteApi(
       this.envService.get('INFLUXDB_ORG'),
       this.envService.get('INFLUXDB_BUCKET'),
     )
     writeApi.writePoint(this.createPoint(value))
-    return from(writeApi.close())
+    await writeApi.close()
   }
 
   /**
@@ -64,10 +55,11 @@ export class InfluxService {
    *
    * @param values defines an array of objects that represents the new
    * point datas.
-   * @returns an observable related to the created points.
    */
-  createMany<T>(values: T[]): Observable<void> {
-    return concat(...values.map((value) => this.createOne(value)))
+  async createMany<T>(values: T[]): Promise<void> {
+    for (const value of values) {
+      await this.createOne(value)
+    }
   }
 
   /**
@@ -76,12 +68,10 @@ export class InfluxService {
    * @param query defines a string the represents the `Flux Query`
    * @returns an observable related to the found data.
    */
-  query<T>(query: string): Observable<T[]> {
-    return from(
-      this.influx
-        .getQueryApi(this.envService.get('INFLUXDB_ORG'))
-        .collectRows<T>(query),
-    )
+  async query<T>(query: string): Promise<T[]> {
+    return this.influx
+      .getQueryApi(this.envService.get('INFLUXDB_ORG'))
+      .collectRows<T>(query)
   }
 
   /**
@@ -89,18 +79,17 @@ export class InfluxService {
    *
    * @returns an observable related to the ping result.
    */
-  private ping(): Observable<void> {
-    return this.httpService.get<void>(this.envService.get('INFLUXDB_URL')).pipe(
-      map(() => void 0),
-      catchError((err) => {
-        this.logger.error('Unable to connect to the Influx database', err)
-        return of(null).pipe(
-          delay(2000),
-          map(() => this.ping()),
-          concatAll(),
-        )
-      }),
-    )
+  private async ping(): Promise<void> {
+    try {
+      await lastValueFrom(
+        this.httpService.get<void>(this.envService.get('INFLUXDB_URL')),
+      )
+    } catch (err) {
+      this.logger.error('Unable to connect to the Influx database', err)
+      await lastValueFrom(interval(2000))
+      this.ping()
+      throw err
+    }
   }
 
   /**

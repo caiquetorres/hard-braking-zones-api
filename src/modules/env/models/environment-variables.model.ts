@@ -124,4 +124,24 @@ export class EnvironmentVariables {
   public DATABASE_SSL?: boolean
 
   //#endregion
+
+  //#region Swagger
+
+  @IsDefined({ message: 'It is required to set the swagger title' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  SWAGGER_TITLE: string
+
+  @IsDefined({ message: 'It is required to set the swagger description' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  SWAGGER_DESCRIPTION: string
+
+  @IsDefined({ message: 'It is required to set the swagger version' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  SWAGGER_VERSION: string
+
+  @IsDefined({ message: 'It is required to set the swagger tag' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  SWAGGER_TAG: string
+
+  //#endregion
 }

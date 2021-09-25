@@ -10,6 +10,8 @@ export class InfluxConfigService implements IInfluxModuleOptionsFactory {
   constructor(private readonly envService: EnvService) {}
 
   createInfluxOptions(): IInfluxModuleOptions {
+    // TODO: test the influx connection in this file
+
     return {
       url: this.envService.get('INFLUXDB_URL'),
       token: this.envService.get('INFLUXDB_TOKEN'),
