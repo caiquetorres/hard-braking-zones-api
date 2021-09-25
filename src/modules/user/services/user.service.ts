@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CrudRequest } from '@nestjsx/crud'
+import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
@@ -14,6 +14,8 @@ import { CreateUserDto } from '../models/create-user.dto'
 
 import { PasswordService } from '../../password/services/password.service'
 import { PermissionService } from '../../permission/services/permission.service'
+
+import { isGetMany } from '../../../utils/crud-request'
 
 /**
  * Service that deals with the user data.
@@ -57,7 +59,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   /**
-   * Method that searches one entity based on it id.
+   * Method that searches for one entity based on it id.
    *
    * @param crudRequest defines an object that represent the sent request.
    * @param requestUser defines an object that represents the logged user.
@@ -72,12 +74,36 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       throw new ForbiddenException()
     }
 
-    const user = await this.repository.findOne(id)
+    const user = await super.getOne(crudRequest)
     if (!user) {
       throw new EntityNotFoundException(id, UserEntity)
     }
 
     return user
+  }
+
+  /**
+   * Method that searches for several entities.
+   *
+   * @param crudRequest defines an object that represent the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents all the the found entities.
+   */
+  async getMany(
+    crudRequest: CrudRequest,
+    requestUser?: UserEntity,
+  ): Promise<GetManyDefaultResponse<UserEntity> | UserEntity[]> {
+    const users = await super.getMany(crudRequest)
+
+    const hasPermission = (isGetMany(users) ? users.data : users).every(
+      (user) => this.permissionService.hasPermission(requestUser, user.id),
+    )
+
+    if (!hasPermission) {
+      throw new ForbiddenException()
+    }
+
+    return users
   }
 
   /**
