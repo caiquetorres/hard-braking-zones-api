@@ -32,6 +32,18 @@ export class EnvironmentVariables {
 
   //#endregion
 
+  //#region
+
+  @IsDefined({ message: 'It is required to set the jwt secret' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  JWT_SECRET: string
+
+  @IsDefined({ message: 'It is required to set the jwt expires in' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  JWT_EXPIRES_IN: string
+
+  //#endregion
+
   //#region Influx
 
   @IsDefined({ message: 'It is required to set the influx user' })
