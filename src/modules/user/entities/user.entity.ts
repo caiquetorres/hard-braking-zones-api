@@ -1,11 +1,13 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { Column, Entity } from 'typeorm'
 
 import { BaseEntity } from '../../../common/base.entity'
 
-import { Exclude, Expose } from 'class-transformer'
+import { Exclude, Expose, Transform } from 'class-transformer'
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
+  @ApiProperty()
   @Column({
     nullable: false,
     type: 'varchar',
@@ -13,6 +15,7 @@ export class UserEntity extends BaseEntity {
   })
   name: string
 
+  @ApiProperty()
   @Column({
     nullable: false,
     type: 'varchar',
@@ -27,15 +30,19 @@ export class UserEntity extends BaseEntity {
   })
   password: string
 
-  @Expose({
+  @ApiProperty({
     name: 'permissions',
+    type: 'string',
+    isArray: true,
   })
+  @Expose({ name: 'permissions' })
+  @Transform((params) => params.value.split('|'))
   @Column({
     nullable: false,
     type: 'varchar',
     length: 32,
   })
-  roles: string
+  role: string
 
   constructor(partial: Partial<UserEntity>) {
     super()
