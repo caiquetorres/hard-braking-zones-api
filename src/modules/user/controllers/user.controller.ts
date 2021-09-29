@@ -9,8 +9,13 @@ import {
 } from '@nestjs/swagger'
 import { Crud, CrudRequest, ParsedRequest } from '@nestjsx/crud'
 
+import { ApiQueryGetOne } from '../../../decorators/api-query-get-one/api-query-get-one.decorator'
+import { ProtectTo } from '../../../decorators/protect-to/protect-to.decorator'
+import { RequestUser } from '../../../decorators/request-user/request-user.decorator'
+
 import { UserEntity } from '../entities/user.entity'
 
+import { RoleEnum } from '../../../models/enums/role.enum'
 import { CreateUserDto } from '../models/create-user.dto'
 
 import { UserService } from '../services/user.service'
@@ -43,7 +48,7 @@ export class UserController {
   /**
    * Method that creates a new entity based on the sent payload.
    *
-   * @param _crudRequest defines an object that represent the sent request.
+   * @param crudRequest defines an object that represent the sent request.
    * @param payload defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
@@ -73,17 +78,46 @@ export class UserController {
    * @returns an object that represents the found entity.
    */
   @ApiOperation({ summary: 'Retrieve a single UserEntity' })
+  @ApiQueryGetOne()
   @ApiCreatedResponse({
     description: 'Retrieve the found UserEntity',
     type: UserEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Get(':id')
   async getOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
+    @RequestUser()
+    requestUser: UserEntity,
   ): Promise<UserEntity> {
-    return this.userService.getOne(crudRequest)
+    return this.userService.getOne(crudRequest, requestUser)
+  }
+
+  /**
+   * Method that searches for one entity based on the request user id.
+   *
+   * @param crudRequest defines an object that represent the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the found entity.
+   */
+  @ApiOperation({ summary: 'Retrieve the logged UserEntity' })
+  @ApiQueryGetOne()
+  @ApiCreatedResponse({
+    description: 'Retrieve the logged UserEntity',
+    type: UserEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
+  @Get('me')
+  async getMe(
+    @ParsedRequest()
+    crudRequest: CrudRequest,
+    @RequestUser()
+    requestUser: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.getMe(crudRequest, requestUser)
   }
 }

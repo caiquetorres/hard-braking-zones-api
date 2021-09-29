@@ -83,6 +83,33 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   /**
+   * Method that searches for one entity based on the request user id.
+   *
+   * @param crudRequest defines an object that represent the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the found entity.
+   */
+  async getMe(
+    crudRequest: CrudRequest,
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    const { id } = requestUser
+
+    crudRequest.parsed.search.$and.push({
+      id: {
+        $eq: id,
+      },
+    })
+
+    const user = await super.getOne(crudRequest)
+    if (!user) {
+      throw new EntityNotFoundException(id, UserEntity)
+    }
+
+    return user
+  }
+
+  /**
    * Method that searches for several entities.
    *
    * @param crudRequest defines an object that represent the sent request.
