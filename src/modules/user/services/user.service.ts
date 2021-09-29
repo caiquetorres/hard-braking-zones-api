@@ -4,6 +4,8 @@ import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
+import { EntityAlreadyDisabledException } from '../../../exceptions/conflict/entity-already-disabled.exception'
+import { EntityAlreadyEnabledException } from '../../../exceptions/conflict/entity-already-enabled.exception'
 import { ForbiddenException } from '../../../exceptions/forbidden/forbidden.exception'
 import { EntityNotFoundException } from '../../../exceptions/not-found/entity-not-found.exception'
 
@@ -172,7 +174,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   /**
-   * Method that deletes entity data.
+   * Method that deletes some entity.
    *
    * @param crudRequest defines an object that represents the sent request.
    * @param requestUser defines an object that represents the logged user.
@@ -196,6 +198,78 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     }
 
     await this.repository.delete(id)
+    await user.reload()
+
+    return user
+  }
+
+  /**
+   * Method that disables some entity.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the disabled entity.
+   */
+  async disableOne(
+    crudRequest: CrudRequest,
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    const id = this.getParamFilters(crudRequest.parsed).id
+
+    if (requestUser) {
+      if (!this.permissionService.hasPermission(requestUser, id)) {
+        throw new ForbiddenException()
+      }
+    }
+
+    const user = await super.getOne(crudRequest)
+    if (!user) {
+      throw new EntityNotFoundException(id, UserEntity)
+    }
+
+    if (!user.isActive) {
+      throw new EntityAlreadyDisabledException(id, UserEntity)
+    }
+
+    await this.repository.update(id, {
+      isActive: false,
+    })
+    await user.reload()
+
+    return user
+  }
+
+  /**
+   * Method that enables some entity.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the enabled entity.
+   */
+  async enableOne(
+    crudRequest: CrudRequest,
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    const id = this.getParamFilters(crudRequest.parsed).id
+
+    if (requestUser) {
+      if (!this.permissionService.hasPermission(requestUser, id)) {
+        throw new ForbiddenException()
+      }
+    }
+
+    const user = await super.getOne(crudRequest)
+    if (!user) {
+      throw new EntityNotFoundException(id, UserEntity)
+    }
+
+    if (user.isActive) {
+      throw new EntityAlreadyEnabledException(id, UserEntity)
+    }
+
+    await this.repository.update(id, {
+      isActive: true,
+    })
     await user.reload()
 
     return user

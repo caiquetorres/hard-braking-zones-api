@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post, Put } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -182,5 +183,55 @@ export class UserController {
     requestUser?: UserEntity,
   ): Promise<UserEntity> {
     return this.userService.deleteOne(crudRequest, requestUser)
+  }
+
+  /**
+   * Method that disables entity data.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the disabled entity.
+   */
+  @ApiOperation({ summary: 'Disable a single user' })
+  @ApiOkResponse({
+    description: 'Retrive the disabled user',
+    type: UserEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ApiConflictResponse({ description: 'Entity already disabled' })
+  @Put(':id/disable')
+  async disableOne(
+    @ParsedRequest()
+    crudRequest: CrudRequest,
+    @RequestUser()
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.disableOne(crudRequest, requestUser)
+  }
+
+  /**
+   * Method that enables entity data.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the enabled entity.
+   */
+  @ApiOperation({ summary: 'Enable a single user' })
+  @ApiOkResponse({
+    description: 'Retrive the enabled user',
+    type: UserEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ApiConflictResponse({ description: 'Entity already enabled' })
+  @Put(':id/enable')
+  async enableOne(
+    @ParsedRequest()
+    crudRequest: CrudRequest,
+    @RequestUser()
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.enableOne(crudRequest, requestUser)
   }
 }
