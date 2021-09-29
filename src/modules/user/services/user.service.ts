@@ -172,6 +172,36 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   }
 
   /**
+   * Method that deletes entity data.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the deleted entity.
+   */
+  async deleteOne(
+    crudRequest: CrudRequest,
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    const id = this.getParamFilters(crudRequest.parsed).id
+
+    if (requestUser) {
+      if (!this.permissionService.hasPermission(requestUser, id)) {
+        throw new ForbiddenException()
+      }
+    }
+
+    const user = await super.getOne(crudRequest)
+    if (!user) {
+      throw new EntityNotFoundException(id, UserEntity)
+    }
+
+    await this.repository.delete(id)
+    await user.reload()
+
+    return user
+  }
+
+  /**
    * Method that checks if some email is already related to some user.
    *
    * @param email defines the email that will be checked.

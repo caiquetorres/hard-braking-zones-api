@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -145,6 +145,9 @@ export class UserController {
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ApiBadRequestResponse({
+    description: 'Payload sent with invalid or missing properties.',
+  })
   @Patch(':id')
   async updateOne(
     @ParsedRequest()
@@ -155,5 +158,29 @@ export class UserController {
     requestUser?: UserEntity,
   ): Promise<UserEntity> {
     return this.userService.updateOne(crudRequest, dto, requestUser)
+  }
+
+  /**
+   * Method that deletes entity data.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the deleted entity.
+   */
+  @ApiOperation({ summary: 'Delete a single user' })
+  @ApiOkResponse({
+    description: 'Retrive the deleted user',
+    type: UserEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @Delete(':id')
+  async deleteOne(
+    @ParsedRequest()
+    crudRequest: CrudRequest,
+    @RequestUser()
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.deleteOne(crudRequest, requestUser)
   }
 }
