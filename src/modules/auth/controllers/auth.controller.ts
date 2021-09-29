@@ -47,7 +47,7 @@ export class AuthController {
     @RequestUser()
     user: UserEntity,
   ): Promise<TokenDto> {
-    return await this.authService.login(user)
+    return this.authService.login(user)
   }
 
   /**
@@ -69,6 +69,6 @@ export class AuthController {
     @RequestUser()
     requestUser: UserEntity,
   ): Promise<TokenDto> {
-    return await this.authService.refresh(requestUser)
+    return this.authService.refresh(requestUser)
   }
 }

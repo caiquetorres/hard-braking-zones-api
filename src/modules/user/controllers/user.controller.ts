@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
@@ -17,6 +18,7 @@ import { UserEntity } from '../entities/user.entity'
 
 import { RoleEnum } from '../../../models/enums/role.enum'
 import { CreateUserDto } from '../models/create-user.dto'
+import { UpdateUserDto } from '../models/update-user.dto'
 
 import { UserService } from '../services/user.service'
 
@@ -26,6 +28,13 @@ import { UserService } from '../services/user.service'
 @Crud({
   model: {
     type: UserEntity,
+  },
+  params: {
+    id: {
+      field: 'id',
+      type: 'uuid',
+      primary: true,
+    },
   },
   routes: {
     exclude: [
@@ -48,8 +57,8 @@ export class UserController {
   /**
    * Method that creates a new entity based on the sent payload.
    *
-   * @param crudRequest defines an object that represent the sent request.
-   * @param payload defines an object that has the entity data.
+   * @param crudRequest defines an object that represents the sent request.
+   * @param dto defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
   @ApiOperation({ summary: 'Create a single UserEntity' })
@@ -65,15 +74,40 @@ export class UserController {
     @ParsedRequest()
     crudRequest: CrudRequest,
     @Body()
-    payload: CreateUserDto,
+    dto: CreateUserDto,
   ): Promise<UserEntity> {
-    return this.userService.createOne(crudRequest, payload)
+    return this.userService.createOne(crudRequest, dto)
+  }
+
+  /**
+   * Method that searches for one entity based on the request user id.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the found entity.
+   */
+  @ApiOperation({ summary: 'Retrieve the logged UserEntity' })
+  @ApiQueryGetOne()
+  @ApiCreatedResponse({
+    description: 'Retrieve the logged UserEntity',
+    type: UserEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
+  @Get('me')
+  async getMe(
+    @ParsedRequest()
+    crudRequest: CrudRequest,
+    @RequestUser()
+    requestUser: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.getMe(crudRequest, requestUser)
   }
 
   /**
    * Method that searches one entity based on it id.
    *
-   * @param crudRequest defines an object that represent the sent request.
+   * @param crudRequest defines an object that represents the sent request.
    * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the found entity.
    */
@@ -97,27 +131,29 @@ export class UserController {
   }
 
   /**
-   * Method that searches for one entity based on the request user id.
+   * Method that updates some entity data.
    *
-   * @param crudRequest defines an object that represent the sent request.
+   * @param crudRequest defines an object that represents the sent request.
+   * @param dto defines an object that represents the new entity data.
    * @param requestUser defines an object that represents the logged user.
-   * @returns an object that represents the found entity.
+   * @returns an object that represents the updated entity.
    */
-  @ApiOperation({ summary: 'Retrieve the logged UserEntity' })
-  @ApiQueryGetOne()
-  @ApiCreatedResponse({
-    description: 'Retrieve the logged UserEntity',
+  @ApiOperation({ summary: 'Update a single user' })
+  @ApiOkResponse({
+    description: 'Retrive the updated user',
     type: UserEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
-  @ProtectTo(RoleEnum.common, RoleEnum.admin)
-  @Get('me')
-  async getMe(
+  @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @Patch(':id')
+  async updateOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
+    @Body()
+    dto: UpdateUserDto,
     @RequestUser()
-    requestUser: UserEntity,
+    requestUser?: UserEntity,
   ): Promise<UserEntity> {
-    return this.userService.getMe(crudRequest, requestUser)
+    return this.userService.updateOne(crudRequest, dto, requestUser)
   }
 }

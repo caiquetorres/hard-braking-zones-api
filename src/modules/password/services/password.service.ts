@@ -14,7 +14,7 @@ export class PasswordService {
    */
   public async encryptPassword(password: string): Promise<string> {
     const salt = await bcryptjs.genSalt()
-    return await bcryptjs.hash(password, salt)
+    return bcryptjs.hash(password, salt)
   }
 
   /**
@@ -27,6 +27,6 @@ export class PasswordService {
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {
-    return await bcryptjs.compare(password, hashedPassword)
+    return bcryptjs.compare(password, hashedPassword)
   }
 }

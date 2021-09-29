@@ -25,7 +25,7 @@ export class AuthService {
   /**
    * Method that creates a token for the authenticated user.
    *
-   * @param user defines an object that represent the request user.
+   * @param user defines an object that represents the request user.
    * @returns an object that contains the user token.
    */
   async login(user: UserEntity): Promise<TokenDto> {
@@ -52,7 +52,7 @@ export class AuthService {
    */
   async refresh(requestUser: UserEntity): Promise<TokenDto> {
     const user = await this.userService.findOne(requestUser.id)
-    return await this.login(user)
+    return this.login(user)
   }
 
   /**

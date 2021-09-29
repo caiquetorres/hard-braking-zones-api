@@ -15,10 +15,10 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
 
   const envService = app.get(EnvService)
-  const reflecter = app.get(Reflector)
+  const reflector = app.get(Reflector)
 
   setupPipes(app)
-  setupInterceptors(app, reflecter)
+  setupInterceptors(app, reflector)
   setupSwagger(app, envService)
 
   app.enableCors()

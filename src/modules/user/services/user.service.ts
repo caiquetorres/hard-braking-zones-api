@@ -11,6 +11,7 @@ import { UserEntity } from '../entities/user.entity'
 
 import { RoleEnum } from '../../../models/enums/role.enum'
 import { CreateUserDto } from '../models/create-user.dto'
+import { UpdateUserDto } from '../models/update-user.dto'
 
 import { PasswordService } from '../../password/services/password.service'
 import { PermissionService } from '../../permission/services/permission.service'
@@ -34,15 +35,15 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   /**
    * Method that creates a new entity based on the sent payload.
    *
-   * @param _crudRequest defines an object that represent the sent request.
-   * @param payload defines an object that has the entity data.
+   * @param _crudRequest defines an object that represents the sent request.
+   * @param dto defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
   async createOne(
     _crudRequest: CrudRequest,
-    payload: CreateUserDto,
+    dto: CreateUserDto,
   ): Promise<UserEntity> {
-    const hasUserWithEmail = await this.hasUserWithEmail(payload.email)
+    const hasUserWithEmail = await this.hasUserWithEmail(dto.email)
 
     if (hasUserWithEmail) {
       throw new BadRequestException(
@@ -50,18 +51,18 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       )
     }
 
-    const user = new UserEntity(payload)
+    const user = new UserEntity(dto)
 
     user.password = await this.passwordService.encryptPassword(user.password)
     user.role = RoleEnum.common
 
-    return await this.repository.save(user)
+    return this.repository.save(user)
   }
 
   /**
    * Method that searches for one entity based on it id.
    *
-   * @param crudRequest defines an object that represent the sent request.
+   * @param crudRequest defines an object that represents the sent request.
    * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the found entity.
    */
@@ -70,8 +71,11 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     requestUser?: UserEntity,
   ): Promise<UserEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
-    if (!this.permissionService.hasPermission(requestUser, id)) {
-      throw new ForbiddenException()
+
+    if (requestUser) {
+      if (!this.permissionService.hasPermission(requestUser, id)) {
+        throw new ForbiddenException()
+      }
     }
 
     const user = await super.getOne(crudRequest)
@@ -85,7 +89,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   /**
    * Method that searches for one entity based on the request user id.
    *
-   * @param crudRequest defines an object that represent the sent request.
+   * @param crudRequest defines an object that represents the sent request.
    * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the found entity.
    */
@@ -112,7 +116,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   /**
    * Method that searches for several entities.
    *
-   * @param crudRequest defines an object that represent the sent request.
+   * @param crudRequest defines an object that represents the sent request.
    * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents all the the found entities.
    */
@@ -122,15 +126,49 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   ): Promise<GetManyDefaultResponse<UserEntity> | UserEntity[]> {
     const users = await super.getMany(crudRequest)
 
-    const hasPermission = (isGetMany(users) ? users.data : users).every(
-      (user) => this.permissionService.hasPermission(requestUser, user.id),
-    )
+    if (requestUser) {
+      const hasPermission = (isGetMany(users) ? users.data : users).every(
+        (user) => this.permissionService.hasPermission(requestUser, user.id),
+      )
 
-    if (!hasPermission) {
-      throw new ForbiddenException()
+      if (!hasPermission) {
+        throw new ForbiddenException()
+      }
     }
 
     return users
+  }
+
+  /**
+   * Method that updates some entity data.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param dto defines an object that represents the new entity data.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the updated entity.
+   */
+  async updateOne(
+    crudRequest: CrudRequest,
+    dto: UpdateUserDto,
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    const id = this.getParamFilters(crudRequest.parsed).id
+
+    if (requestUser) {
+      if (!this.permissionService.hasPermission(requestUser, id)) {
+        throw new ForbiddenException()
+      }
+    }
+
+    const user = await super.getOne(crudRequest)
+    if (!user) {
+      throw new EntityNotFoundException(id, UserEntity)
+    }
+
+    await this.repository.update(id, dto)
+    await user.reload()
+
+    return user
   }
 
   /**
