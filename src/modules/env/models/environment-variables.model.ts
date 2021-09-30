@@ -18,6 +18,10 @@ export class EnvironmentVariables {
   NODE_ENV: string
 
   @IsOptional()
+  @IsString({ message: 'It is required to set a valid string value' })
+  PACKAGE_VERSION?: string
+
+  @IsOptional()
   @IsNumber({}, { message: 'It is required to set a number value' })
   PORT?: number
 
@@ -154,6 +158,18 @@ export class EnvironmentVariables {
   @IsDefined({ message: 'It is required to set the swagger tag' })
   @IsString({ message: 'It is required to set a valid string value' })
   SWAGGER_TAG: string
+
+  //#endregion
+
+  //#region Sentry
+
+  @IsOptional()
+  @IsBoolean({ message: 'It is required to set a valid boolean value' })
+  SENTRY_ENABLED?: boolean
+
+  @IsOptional()
+  @IsString({ message: 'It is required to set a valid string' })
+  SENTRY_DSN?: string
 
   //#endregion
 }
