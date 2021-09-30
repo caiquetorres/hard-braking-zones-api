@@ -24,7 +24,7 @@ module.exports = {
       {
         newlinesBetween: 'always',
         groups: [
-          '/@nestjs|^typeorm|@sentry|^@graphql-example/',
+          '/@nestjs|^typeorm|@sentry|socket.io/',
           '/.types/',
           '/.decorator/',
           '/.guard/',
