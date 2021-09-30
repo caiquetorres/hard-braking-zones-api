@@ -1,33 +1,30 @@
-import { UseGuards } from '@nestjs/common'
 import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets'
 
-import { Roles } from '../../../decorators/roles/roles.decorator'
-
-import { JwtGuard } from '../../../guards/jwt/jwt.guard'
-import { RoleGuard } from '../../../guards/role/role.guard'
-
-import { RoleEnum } from '../../../models/enums/role.enum'
 import { CreateVelocityDto } from '../dtos/create-velocity.dto'
 
 import { VelocityService } from '../services/velocity.service'
 
-@WebSocketGateway({
-  namespace: 'velocity',
-})
+/**
+ * Gateway responsible for dealing with the velocity data receiving.
+ */
+@WebSocketGateway()
 export class VelocityGateway {
   constructor(private readonly velocityService: VelocityService) {}
 
-  @Roles(RoleEnum.common, RoleEnum.admin)
-  @UseGuards(JwtGuard, RoleGuard)
-  @SubscribeMessage('message')
-  async handleMessage(
+  /**
+   * Method that creates a new velocity point in the influx database.
+   *
+   * @param dto defines an object that has the point data
+   */
+  @SubscribeMessage('velocity')
+  async handleVelocity(
     @MessageBody()
-    data: CreateVelocityDto,
+    dto: CreateVelocityDto,
   ): Promise<void> {
-    this.velocityService.createOne(data)
+    this.velocityService.createOne(dto)
   }
 }
