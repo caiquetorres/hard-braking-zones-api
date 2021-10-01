@@ -24,7 +24,7 @@ import { UpdateUserDto } from '../models/update-user.dto'
 import { UserService } from '../services/user.service'
 
 /**
- * Controller that deals with routes related with users.
+ * Controller that deals with routes related with the `user` entity.
  */
 @Crud({
   model: {
