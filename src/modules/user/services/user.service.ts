@@ -21,7 +21,7 @@ import { PermissionService } from '../../permission/services/permission.service'
 import { isGetMany } from '../../../utils/crud-request'
 
 /**
- * Service that deals with the user data.
+ * Service that deals with the `user` data.
  */
 @Injectable()
 export class UserService extends TypeOrmCrudService<UserEntity> {

@@ -8,6 +8,7 @@ import { TypeOrmConfigService } from './config/typeorm/typeorm-config.service'
 
 import { AuthModule } from './modules/auth/auth.module'
 import { EnvModule } from './modules/env/env.module'
+import { FeedbackModule } from './modules/feedback/feedback.module'
 import { InfluxModule } from './modules/influx/influx.module'
 import { PasswordModule } from './modules/password/password.module'
 import { PermissionModule } from './modules/permission/permission.module'
@@ -21,6 +22,7 @@ import { VelocityModule } from './modules/velocity/velocity.module'
     PermissionModule,
     UserModule,
     VelocityModule,
+    FeedbackModule,
     EnvModule.forRoot({
       envFilePath: ['.env'],
     }),
