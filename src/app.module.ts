@@ -1,11 +1,12 @@
 import { HttpModule } from '@nestjs/axios'
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { HttpConfigService } from './config/http/http-config.service'
 import { InfluxConfigService } from './config/influx/influx-config.service'
 import { TypeOrmConfigService } from './config/typeorm/typeorm-config.service'
 
+import { PathLoggerMiddleware } from './middlewares/path-logger/path-logger.middleware'
 import { AuthModule } from './modules/auth/auth.module'
 import { EnvModule } from './modules/env/env.module'
 import { FeedbackModule } from './modules/feedback/feedback.module'
@@ -37,4 +38,8 @@ import { VelocityModule } from './modules/velocity/velocity.module'
     }),
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  public configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(PathLoggerMiddleware).forRoutes('*')
+  }
+}
