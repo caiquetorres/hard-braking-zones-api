@@ -6,6 +6,9 @@ import { ThrottlerGuard } from '@nestjs/throttler'
  */
 @Injectable()
 export class RateLimitGuard extends ThrottlerGuard {
+  /**
+   * Method that throws the default exception for `too-many-requests`.
+   */
   throwThrottlingException(): void {
     throw new HttpException('Too many requests', HttpStatus.TOO_MANY_REQUESTS)
   }
