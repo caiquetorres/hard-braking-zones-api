@@ -1,23 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 
 /**
  * Guard responsible for protecting routes using the `local` strategy.
  */
 @Injectable()
-export class LocalGuard extends AuthGuard('local') {
-  /**
-   * Method that handles the request and deals with the user and error data.
-   *
-   * @param error defines an object that represents the error.
-   * @param user defines an object that represents the logged user.
-   * @returns an object that represents the logged user.
-   */
-  public handleRequest<T>(error: Error, user: T): T {
-    if (error || !user) {
-      throw new UnauthorizedException('The username or password are wrong')
-    }
-
-    return user
-  }
-}
+export class LocalGuard extends AuthGuard('local') {}
