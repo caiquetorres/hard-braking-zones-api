@@ -10,8 +10,8 @@ import { BaseEntity } from '../../shared/base.entity'
  * throw new EntityAlreadyEnabledException(1, EntityType)
  * ```
  *
- * @param identifier defines the entity id or unique identifier value
- * @param type defines the entity type
+ * @param identifier defines the entity id or unique identifier value.
+ * @param type defines the entity type.
  */
 export class EntityAlreadyEnabledException extends HttpException {
   public constructor(identifier: number | string, type?: Type<BaseEntity>) {

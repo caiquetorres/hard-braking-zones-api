@@ -8,6 +8,9 @@ import { AuthService } from '../services/auth.service'
 
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
 
+/**
+ * Service that validates the jwt token sent by the request user.
+ */
 @Injectable()
 export class JwtStrategyService extends PassportStrategy(Strategy) {
   constructor(
@@ -22,6 +25,12 @@ export class JwtStrategyService extends PassportStrategy(Strategy) {
     } as StrategyOptions)
   }
 
+  /**
+   * Method that validates the jwt request user.
+   *
+   * @param user defines an object that represents the request user.
+   * @returns an object that represents the logged user.
+   */
   async validate(user: UserEntity): Promise<UserEntity> {
     return this.authService.validateJwt(user)
   }

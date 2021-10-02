@@ -13,7 +13,7 @@ import { Request, Response } from 'express'
 
 /**
  * Class that represents the filter that capture some exception and send
- * it to sentry.io
+ * it to sentry.io.
  */
 @Catch()
 export class SentryFilter implements ExceptionFilter {
@@ -37,10 +37,11 @@ export class SentryFilter implements ExceptionFilter {
   }
 
   /**
-   * Method that deals with the thrown exceptions
+   * Method that deals with the thrown exceptions.
    *
-   * @param exception defines and object that represents the thrown exception
-   * @param host defines and object that represents the host arguments
+   * @param exception defines and object that represents the thrown
+   * exception.
+   * @param host defines and object that represents the host arguments.
    */
   catch(exception: HttpException, host: ArgumentsHost): void {
     const context = host.switchToHttp()

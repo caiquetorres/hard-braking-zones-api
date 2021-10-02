@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import * as bcryptjs from 'bcryptjs'
 
 /**
- * Service that deals with the password encryption and comparing logic
+ * Service that deals with the password encryption and comparing logic.
  */
 @Injectable()
 export class PasswordService {

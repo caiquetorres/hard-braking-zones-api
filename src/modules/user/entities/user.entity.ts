@@ -5,6 +5,9 @@ import { BaseEntity } from '../../../shared/base.entity'
 
 import { Exclude, Expose, Transform } from 'class-transformer'
 
+/**
+ * Entity that represents the `user`.
+ */
 @Entity('user')
 export class UserEntity extends BaseEntity {
   @ApiProperty()

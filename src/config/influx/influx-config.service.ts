@@ -5,10 +5,18 @@ import { EnvService } from '../../modules/env/services/env.service'
 import { IInfluxModuleOptionsFactory } from '../../modules/influx/interfaces/influx-module-options-factory.interface'
 import { IInfluxModuleOptions } from '../../modules/influx/interfaces/influx-module-options.interface'
 
+/**
+ * Service deals with the influx configuration.
+ */
 @Injectable()
 export class InfluxConfigService implements IInfluxModuleOptionsFactory {
   constructor(private readonly envService: EnvService) {}
 
+  /**
+   * Method that creates a new configuration for the influx.
+   *
+   * @returns the created influx configuration object.
+   */
   createInfluxOptions(): IInfluxModuleOptions {
     // TODO: test the influx connection in this file
 

@@ -3,6 +3,9 @@ import { Column, Entity } from 'typeorm'
 
 import { BaseEntity } from '../../../shared/base.entity'
 
+/**
+ * Entity that represents the `feedback`.
+ */
 @Entity('feedback')
 export class FeedbackEntity extends BaseEntity {
   @ApiProperty()

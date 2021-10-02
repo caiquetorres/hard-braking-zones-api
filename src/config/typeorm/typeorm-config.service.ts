@@ -6,16 +6,16 @@ import { EnvService } from '../../modules/env/services/env.service'
 import * as path from 'path'
 
 /**
- * Service deals with the typeorm configuration
+ * Service deals with the typeorm configuration.
  */
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private readonly envService: EnvService) {}
 
   /**
-   * Method that creates a new configuration for the typeorm
+   * Method that creates a new configuration for the typeorm.
    *
-   * @returns the created typeorm configuration object
+   * @returns the created typeorm configuration object.
    */
   createTypeOrmOptions(): TypeOrmModuleOptions {
     const entitiesPath = path.resolve(process.cwd(), '**', '*.entity.js')
