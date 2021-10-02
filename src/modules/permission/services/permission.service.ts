@@ -31,7 +31,9 @@ export class PermissionService {
    */
   private isAdmin(currentUser: UserEntity): boolean {
     return (
-      currentUser && currentUser.role && currentUser.role === RoleEnum.admin
+      currentUser &&
+      currentUser.role &&
+      currentUser.role.includes(RoleEnum.admin)
     )
   }
 }
