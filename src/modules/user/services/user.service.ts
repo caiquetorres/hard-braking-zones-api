@@ -18,8 +18,6 @@ import { UpdateUserDto } from '../models/update-user.dto'
 import { PasswordService } from '../../password/services/password.service'
 import { PermissionService } from '../../permission/services/permission.service'
 
-import { isGetMany } from '../../../utils/crud-request'
-
 /**
  * Service that deals with the `user` data.
  */
@@ -119,26 +117,12 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
    * Method that searches for several entities.
    *
    * @param crudRequest defines an object that represents the sent request.
-   * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents all the the found entities.
    */
   async getMany(
     crudRequest: CrudRequest,
-    requestUser?: UserEntity,
   ): Promise<GetManyDefaultResponse<UserEntity> | UserEntity[]> {
-    const users = await super.getMany(crudRequest)
-
-    if (requestUser) {
-      const hasPermission = (isGetMany(users) ? users.data : users).every(
-        (user) => this.permissionService.hasPermission(requestUser, user.id),
-      )
-
-      if (!hasPermission) {
-        throw new ForbiddenException()
-      }
-    }
-
-    return users
+    return await super.getMany(crudRequest)
   }
 
   /**

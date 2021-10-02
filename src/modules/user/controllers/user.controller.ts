@@ -7,10 +7,17 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiProperty,
   ApiTags,
 } from '@nestjs/swagger'
-import { Crud, CrudRequest, ParsedRequest } from '@nestjsx/crud'
+import {
+  Crud,
+  CrudRequest,
+  GetManyDefaultResponse,
+  ParsedRequest,
+} from '@nestjsx/crud'
 
+import { ApiQueryGetMany } from '../../../decorators/api-query-get-many/api-query-get-many.decorator'
 import { ApiQueryGetOne } from '../../../decorators/api-query-get-one/api-query-get-one.decorator'
 import { ProtectTo } from '../../../decorators/protect-to/protect-to.decorator'
 import { RequestUser } from '../../../decorators/request-user/request-user.decorator'
@@ -18,6 +25,7 @@ import { RequestUser } from '../../../decorators/request-user/request-user.decor
 import { UserEntity } from '../entities/user.entity'
 
 import { RoleEnum } from '../../../models/enums/role.enum'
+import { BaseGetManyDefaultResponseDto } from '../../../shared/base-get-many-default-response.dto'
 import { CreateUserDto } from '../models/create-user.dto'
 import { UpdateUserDto } from '../models/update-user.dto'
 
@@ -89,7 +97,7 @@ export class UserController {
    */
   @ApiOperation({ summary: 'Retrieve the logged UserEntity' })
   @ApiQueryGetOne()
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: 'Retrieve the logged UserEntity',
     type: UserEntity,
   })
@@ -106,7 +114,7 @@ export class UserController {
   }
 
   /**
-   * Method that searches one entity based on it id.
+   * Method that searches for one entity based on it id.
    *
    * @param crudRequest defines an object that represents the sent request.
    * @param requestUser defines an object that represents the logged user.
@@ -114,7 +122,7 @@ export class UserController {
    */
   @ApiOperation({ summary: 'Retrieve a single UserEntity' })
   @ApiQueryGetOne()
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: 'Retrieve the found UserEntity',
     type: UserEntity,
   })
@@ -129,6 +137,37 @@ export class UserController {
     requestUser: UserEntity,
   ): Promise<UserEntity> {
     return this.userService.getOne(crudRequest, requestUser)
+  }
+
+  /**
+   * Method that searches for several entities based on the sent route queries.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @returns an object that represents all the found entities.
+   */
+  @ApiOperation({ summary: 'Retrieve several UserEntities' })
+  @ApiQueryGetMany()
+  @ApiOkResponse({
+    description: 'Retrieve several found UserEntities',
+    type: () => {
+      class GetManyUserEntities extends BaseGetManyDefaultResponseDto {
+        @ApiProperty({
+          type: UserEntity,
+          isArray: true,
+        })
+        data: UserEntity[]
+      }
+      return GetManyUserEntities
+    },
+  })
+  @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ProtectTo(RoleEnum.admin)
+  @Get()
+  async getMany(
+    @ParsedRequest()
+    crudRequest: CrudRequest,
+  ): Promise<GetManyDefaultResponse<UserEntity> | UserEntity[]> {
+    return this.userService.getMany(crudRequest)
   }
 
   /**
