@@ -6,10 +6,18 @@ import { Request, Response, NextFunction } from 'express'
 export class PathLoggerMiddleware implements NestMiddleware {
   private readonly logger = new Logger('PathLogger')
 
-  use(req: Request, _: Response, next: NextFunction): void {
-    this.logger.debug(
-      `${req.method}:${req.baseUrl.replace('/', '')}${req.path}`,
-    )
+  use(request: Request, response: Response, next: NextFunction): void {
+    const { method, originalUrl } = request
+
+    response.on('finish', () => {
+      const { statusCode } = response
+      const contentLength = response.get('content-length')
+
+      this.logger.debug(
+        `${method} ${originalUrl} ${statusCode} ${`${contentLength} bytes`}`,
+      )
+    })
+
     next()
   }
 }
