@@ -18,7 +18,7 @@ export class PermissionService {
    * @param targetUserId defines which user this entity or route is related to.
    * @returns true if the user does have the permissions, otherwise false.
    */
-  public hasPermission(currentUser: UserEntity, targetUserId: string): boolean {
+  hasPermission(currentUser: UserEntity, targetUserId: string): boolean {
     return this.isAdmin(currentUser) || targetUserId === currentUser.id
   }
 

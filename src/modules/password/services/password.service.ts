@@ -12,7 +12,7 @@ export class PasswordService {
    *
    * @param password stores the password that will be encrypted.
    */
-  public async encryptPassword(password: string): Promise<string> {
+  async encryptPassword(password: string): Promise<string> {
     const salt = await bcryptjs.genSalt()
     return bcryptjs.hash(password, salt)
   }
@@ -23,7 +23,7 @@ export class PasswordService {
    * @param password stores the password that the user is passing.
    * @param hashedPassword stores the hashed password in the database.
    */
-  public async comparePassword(
+  async comparePassword(
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {

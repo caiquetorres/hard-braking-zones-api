@@ -65,7 +65,7 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'User is not authenticated' })
   @HttpCode(200)
   @Post('refresh')
-  public async refresh(
+  async refresh(
     @RequestUser()
     requestUser: UserEntity,
   ): Promise<TokenDto> {

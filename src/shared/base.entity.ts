@@ -13,20 +13,20 @@ import {
 export abstract class BaseEntity extends BaseEntityTypeOrm {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
-  public id: string
+  id: string
 
   @ApiProperty()
   @CreateDateColumn()
-  public createdAt: Date
+  createdAt: Date
 
   @ApiProperty()
   @UpdateDateColumn()
-  public updatedAt: Date
+  updatedAt: Date
 
   @ApiProperty()
   @Column({
     type: 'boolean',
     default: true,
   })
-  public isActive: boolean
+  isActive: boolean
 }

@@ -14,7 +14,7 @@ import { BaseEntity } from '../../shared/base.entity'
  * @param type defines the entity type.
  */
 export class EntityAlreadyEnabledException extends HttpException {
-  public constructor(identifier: number | string, type?: Type<BaseEntity>) {
+  constructor(identifier: number | string, type?: Type<BaseEntity>) {
     super(
       `The entity identified by '${identifier}'${
         type ? ` of type '${type.name}'` : ''
