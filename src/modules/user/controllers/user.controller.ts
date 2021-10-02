@@ -149,6 +149,7 @@ export class UserController {
   @ApiBadRequestResponse({
     description: 'Payload sent with invalid or missing properties.',
   })
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Patch(':id')
   async updateOne(
     @ParsedRequest()
@@ -175,6 +176,7 @@ export class UserController {
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Delete(':id')
   async deleteOne(
     @ParsedRequest()
@@ -200,6 +202,7 @@ export class UserController {
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
   @ApiConflictResponse({ description: 'Entity already disabled' })
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Put(':id/disable')
   async disableOne(
     @ParsedRequest()
@@ -225,6 +228,7 @@ export class UserController {
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
   @ApiConflictResponse({ description: 'Entity already enabled' })
+  @ProtectTo(RoleEnum.admin)
   @Put(':id/enable')
   async enableOne(
     @ParsedRequest()

@@ -48,7 +48,7 @@ export class FeedbackService extends TypeOrmCrudService<FeedbackEntity> {
   async getOne(crudRequest: CrudRequest): Promise<FeedbackEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const feedback = await super.getOne(crudRequest)
+    const feedback = await super.getOne(crudRequest).catch(() => undefined)
     if (!feedback) {
       throw new EntityNotFoundException(id, FeedbackEntity)
     }
@@ -81,7 +81,7 @@ export class FeedbackService extends TypeOrmCrudService<FeedbackEntity> {
   ): Promise<FeedbackEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const feedback = await super.getOne(crudRequest)
+    const feedback = await super.getOne(crudRequest).catch(() => undefined)
     if (!feedback) {
       throw new EntityNotFoundException(id, FeedbackEntity)
     }
@@ -101,13 +101,12 @@ export class FeedbackService extends TypeOrmCrudService<FeedbackEntity> {
   async deleteOne(crudRequest: CrudRequest): Promise<FeedbackEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const feedback = await super.getOne(crudRequest)
+    const feedback = await super.getOne(crudRequest).catch(() => undefined)
     if (!feedback) {
       throw new EntityNotFoundException(id, FeedbackEntity)
     }
 
     await this.repository.delete(id)
-    await feedback.reload()
 
     return feedback
   }
@@ -121,7 +120,7 @@ export class FeedbackService extends TypeOrmCrudService<FeedbackEntity> {
   async disableOne(crudRequest: CrudRequest): Promise<FeedbackEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const feedback = await super.getOne(crudRequest)
+    const feedback = await super.getOne(crudRequest).catch(() => undefined)
     if (!feedback) {
       throw new EntityNotFoundException(id, FeedbackEntity)
     }
@@ -147,7 +146,7 @@ export class FeedbackService extends TypeOrmCrudService<FeedbackEntity> {
   async enableOne(crudRequest: CrudRequest): Promise<FeedbackEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const feedback = await super.getOne(crudRequest)
+    const feedback = await super.getOne(crudRequest).catch(() => undefined)
     if (!feedback) {
       throw new EntityNotFoundException(id, FeedbackEntity)
     }

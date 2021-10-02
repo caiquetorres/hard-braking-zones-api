@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { ConflictException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
@@ -48,7 +48,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     const hasUserWithEmail = await this.hasUserWithEmail(dto.email)
 
     if (hasUserWithEmail) {
-      throw new BadRequestException(
+      throw new ConflictException(
         'An user with this email was already registered',
       )
     }
@@ -80,7 +80,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       }
     }
 
-    const user = await super.getOne(crudRequest)
+    const user = await super.getOne(crudRequest).catch(() => undefined)
     if (!user) {
       throw new EntityNotFoundException(id, UserEntity)
     }
@@ -107,7 +107,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       },
     })
 
-    const user = await super.getOne(crudRequest)
+    const user = await super.getOne(crudRequest).catch(() => undefined)
     if (!user) {
       throw new EntityNotFoundException(id, UserEntity)
     }
@@ -162,7 +162,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       }
     }
 
-    const user = await super.getOne(crudRequest)
+    const user = await super.getOne(crudRequest).catch(() => undefined)
     if (!user) {
       throw new EntityNotFoundException(id, UserEntity)
     }
@@ -192,13 +192,12 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       }
     }
 
-    const user = await super.getOne(crudRequest)
+    const user = await super.getOne(crudRequest).catch(() => undefined)
     if (!user) {
       throw new EntityNotFoundException(id, UserEntity)
     }
 
     await this.repository.delete(id)
-    await user.reload()
 
     return user
   }
@@ -222,7 +221,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       }
     }
 
-    const user = await super.getOne(crudRequest)
+    const user = await super.getOne(crudRequest).catch(() => undefined)
     if (!user) {
       throw new EntityNotFoundException(id, UserEntity)
     }
@@ -258,7 +257,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       }
     }
 
-    const user = await super.getOne(crudRequest)
+    const user = await super.getOne(crudRequest).catch(() => undefined)
     if (!user) {
       throw new EntityNotFoundException(id, UserEntity)
     }
