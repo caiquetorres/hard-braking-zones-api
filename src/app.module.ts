@@ -1,9 +1,14 @@
 import { HttpModule } from '@nestjs/axios'
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { APP_GUARD } from '@nestjs/core'
+import { ThrottlerModule } from '@nestjs/throttler'
 import { TypeOrmModule } from '@nestjs/typeorm'
+
+import { RateLimitGuard } from './guards/rate-limit/rate-limit.guard'
 
 import { HttpConfigService } from './config/http/http-config.service'
 import { InfluxConfigService } from './config/influx/influx-config.service'
+import { ThrottlerConfigService } from './config/throttler/throttler-config.service'
 import { TypeOrmConfigService } from './config/typeorm/typeorm-config.service'
 
 import { PathLoggerMiddleware } from './middlewares/path-logger/path-logger.middleware'
@@ -27,6 +32,9 @@ import { VelocityModule } from './modules/velocity/velocity.module'
     EnvModule.forRoot({
       envFilePath: ['.env'],
     }),
+    ThrottlerModule.forRootAsync({
+      useClass: ThrottlerConfigService,
+    }),
     HttpModule.registerAsync({
       useClass: HttpConfigService,
     }),
@@ -36,6 +44,12 @@ import { VelocityModule } from './modules/velocity/velocity.module'
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RateLimitGuard,
+    },
   ],
 })
 export class AppModule implements NestModule {

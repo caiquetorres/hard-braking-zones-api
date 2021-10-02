@@ -48,6 +48,22 @@ export class EnvironmentVariables {
 
   //#endregion
 
+  //#region Rate limit
+
+  @IsOptional()
+  @IsBoolean({ message: 'It is required to set a valid boolean value' })
+  THROTTLER_ENABLED?: boolean
+
+  @IsDefined({ message: 'It is required to set the throttler time to live' })
+  @IsNumber({}, { message: 'It is required to set a valid number' })
+  THROTTLER_TTL: number
+
+  @IsDefined({ message: 'It is required to set the throttler limit' })
+  @IsNumber({}, { message: 'It is required to set a valid number' })
+  THROTTLER_LIMIT: number
+
+  //#endregion
+
   //#region Influx
 
   @IsDefined({ message: 'It is required to set the influx user' })
