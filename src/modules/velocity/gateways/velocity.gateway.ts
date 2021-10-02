@@ -1,3 +1,4 @@
+import { SkipThrottle } from '@nestjs/throttler'
 import {
   MessageBody,
   SubscribeMessage,
@@ -11,6 +12,7 @@ import { VelocityService } from '../services/velocity.service'
 /**
  * Gateway responsible for dealing with the velocity data receiving.
  */
+@SkipThrottle()
 @WebSocketGateway()
 export class VelocityGateway {
   constructor(private readonly velocityService: VelocityService) {}
