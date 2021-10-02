@@ -10,12 +10,7 @@ import {
   ApiProperty,
   ApiTags,
 } from '@nestjs/swagger'
-import {
-  Crud,
-  CrudRequest,
-  GetManyDefaultResponse,
-  ParsedRequest,
-} from '@nestjsx/crud'
+import { Crud, CrudRequest, ParsedRequest } from '@nestjsx/crud'
 
 import { ApiQueryGetMany } from '../../../decorators/api-query-get-many/api-query-get-many.decorator'
 import { ApiQueryGetOne } from '../../../decorators/api-query-get-one/api-query-get-one.decorator'
@@ -25,7 +20,7 @@ import { RequestUser } from '../../../decorators/request-user/request-user.decor
 import { UserEntity } from '../entities/user.entity'
 
 import { RoleEnum } from '../../../models/enums/role.enum'
-import { BaseGetManyDefaultResponseDto } from '../../../shared/base-get-many-default-response.dto'
+import { PageDto } from '../../../shared/page.dto'
 import { CreateUserDto } from '../models/create-user.dto'
 import { UpdateUserDto } from '../models/update-user.dto'
 
@@ -150,14 +145,14 @@ export class UserController {
   @ApiOkResponse({
     description: 'Retrieve several found UserEntities',
     type: () => {
-      class GetManyUserEntities extends BaseGetManyDefaultResponseDto {
+      class UserEntityPage extends PageDto<UserEntity> {
         @ApiProperty({
           type: UserEntity,
           isArray: true,
         })
         data: UserEntity[]
       }
-      return GetManyUserEntities
+      return UserEntityPage
     },
   })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -166,7 +161,7 @@ export class UserController {
   async getMany(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<GetManyDefaultResponse<UserEntity> | UserEntity[]> {
+  ): Promise<PageDto<UserEntity> | UserEntity[]> {
     return this.userService.getMany(crudRequest)
   }
 

@@ -17,7 +17,7 @@ export class EntityNotFoundException extends HttpException {
       `The entity identified by '${identifier}'${
         type ? ` of type '${type.name}'` : ''
       } does not exist or is disabled`,
-      HttpStatus.CONFLICT,
+      HttpStatus.NOT_FOUND,
     )
   }
 }

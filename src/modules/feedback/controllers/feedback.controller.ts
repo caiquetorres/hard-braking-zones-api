@@ -10,12 +10,7 @@ import {
   ApiProperty,
   ApiTags,
 } from '@nestjs/swagger'
-import {
-  Crud,
-  CrudRequest,
-  GetManyDefaultResponse,
-  ParsedRequest,
-} from '@nestjsx/crud'
+import { Crud, CrudRequest, ParsedRequest } from '@nestjsx/crud'
 
 import { ApiQueryGetMany } from '../../../decorators/api-query-get-many/api-query-get-many.decorator'
 import { ApiQueryGetOne } from '../../../decorators/api-query-get-one/api-query-get-one.decorator'
@@ -24,7 +19,7 @@ import { ProtectTo } from '../../../decorators/protect-to/protect-to.decorator'
 import { FeedbackEntity } from '../entities/feedback.entity'
 
 import { RoleEnum } from '../../../models/enums/role.enum'
-import { BaseGetManyDefaultResponseDto } from '../../../shared/base-get-many-default-response.dto'
+import { PageDto } from '../../../shared/page.dto'
 import { CreateFeedbackDto } from '../models/create-feedback.dto'
 import { UpdateFeedbackDto } from '../models/update-feedback.dto'
 
@@ -121,14 +116,14 @@ export class FeedbackController {
   @ApiOkResponse({
     description: 'Retrieve several found UserEntities',
     type: () => {
-      class GetManyFeedbackEntities extends BaseGetManyDefaultResponseDto {
+      class FeedbackEntityPage extends PageDto<FeedbackEntity> {
         @ApiProperty({
           type: FeedbackEntity,
           isArray: true,
         })
         data: FeedbackEntity[]
       }
-      return GetManyFeedbackEntities
+      return FeedbackEntityPage
     },
   })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -137,7 +132,7 @@ export class FeedbackController {
   async getMany(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<GetManyDefaultResponse<FeedbackEntity> | FeedbackEntity[]> {
+  ): Promise<PageDto<FeedbackEntity> | FeedbackEntity[]> {
     return this.feedbackService.getMany(crudRequest)
   }
 

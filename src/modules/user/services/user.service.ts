@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
+import { CrudRequest } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
@@ -12,6 +12,7 @@ import { EntityNotFoundException } from '../../../exceptions/not-found/entity-no
 import { UserEntity } from '../entities/user.entity'
 
 import { RoleEnum } from '../../../models/enums/role.enum'
+import { PageDto } from '../../../shared/page.dto'
 import { CreateUserDto } from '../models/create-user.dto'
 import { UpdateUserDto } from '../models/update-user.dto'
 
@@ -121,8 +122,8 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
    */
   async getMany(
     crudRequest: CrudRequest,
-  ): Promise<GetManyDefaultResponse<UserEntity> | UserEntity[]> {
-    return await super.getMany(crudRequest)
+  ): Promise<PageDto<UserEntity> | UserEntity[]> {
+    return super.getMany(crudRequest)
   }
 
   /**

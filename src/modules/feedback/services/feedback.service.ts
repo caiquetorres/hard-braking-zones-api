@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
+import { CrudRequest } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
@@ -10,6 +10,7 @@ import { EntityNotFoundException } from '../../../exceptions/not-found/entity-no
 
 import { FeedbackEntity } from '../entities/feedback.entity'
 
+import { PageDto } from '../../../shared/page.dto'
 import { CreateFeedbackDto } from '../models/create-feedback.dto'
 import { UpdateFeedbackDto } from '../models/update-feedback.dto'
 
@@ -64,8 +65,8 @@ export class FeedbackService extends TypeOrmCrudService<FeedbackEntity> {
    */
   async getMany(
     crudRequest: CrudRequest,
-  ): Promise<GetManyDefaultResponse<FeedbackEntity> | FeedbackEntity[]> {
-    return await super.getMany(crudRequest)
+  ): Promise<PageDto<FeedbackEntity> | FeedbackEntity[]> {
+    return super.getMany(crudRequest)
   }
 
   /**

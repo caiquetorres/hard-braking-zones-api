@@ -53,7 +53,7 @@ import { VelocityModule } from './modules/velocity/velocity.module'
   ],
 })
 export class AppModule implements NestModule {
-  public configure(consumer: MiddlewareConsumer): void {
+  configure(consumer: MiddlewareConsumer): void {
     consumer.apply(PathLoggerMiddleware).forRoutes('*')
   }
 }

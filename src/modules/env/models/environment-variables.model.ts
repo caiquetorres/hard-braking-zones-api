@@ -50,10 +50,6 @@ export class EnvironmentVariables {
 
   //#region Rate limit
 
-  @IsOptional()
-  @IsBoolean({ message: 'It is required to set a valid boolean value' })
-  THROTTLER_ENABLED?: boolean
-
   @IsDefined({ message: 'It is required to set the throttler time to live' })
   @IsNumber({}, { message: 'It is required to set a valid number' })
   THROTTLER_TTL: number
