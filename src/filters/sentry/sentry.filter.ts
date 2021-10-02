@@ -1,4 +1,5 @@
 import {
+  ArgumentsHost,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -7,6 +8,8 @@ import {
 import * as Sentry from '@sentry/node'
 
 import { EnvService } from '../../modules/env/services/env.service'
+
+import { Request, Response } from 'express'
 
 /**
  * Class that represents the filter that capture some exception and send
@@ -39,7 +42,11 @@ export class SentryFilter implements ExceptionFilter {
    * @param exception defines and object that represents the thrown exception
    * @param host defines and object that represents the host arguments
    */
-  catch(exception: HttpException): HttpException {
+  catch(exception: HttpException, host: ArgumentsHost): void {
+    const context = host.switchToHttp()
+    const response = context.getResponse<Response>()
+    const request = context.getRequest<Request>()
+
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
@@ -49,6 +56,11 @@ export class SentryFilter implements ExceptionFilter {
       Sentry.captureException(exception)
     }
 
-    return exception
+    response.status(status).json({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      message: exception.message,
+    })
   }
 }
