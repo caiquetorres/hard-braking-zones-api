@@ -12,6 +12,7 @@ import { ThrottlerConfigService } from './config/throttler/throttler-config.serv
 import { TypeOrmConfigService } from './config/typeorm/typeorm-config.service'
 
 import { PathLoggerMiddleware } from './middlewares/path-logger/path-logger.middleware'
+import { AboutModule } from './modules/about/about.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { EnvModule } from './modules/env/env.module'
 import { FeedbackModule } from './modules/feedback/feedback.module'
@@ -29,6 +30,7 @@ import { VelocityModule } from './modules/velocity/velocity.module'
     UserModule,
     VelocityModule,
     FeedbackModule,
+    AboutModule,
     EnvModule.forRoot({
       envFilePath: ['.env'],
     }),
