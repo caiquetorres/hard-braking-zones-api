@@ -111,10 +111,10 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents all the found entities.
    */
-  @ApiOperation({ summary: 'Retrieve several UserEntities' })
+  @ApiOperation({ summary: 'Retrieve several FeedbackEntities' })
   @ApiQueryGetMany()
   @ApiOkResponse({
-    description: 'Retrieve several found UserEntities',
+    description: 'Retrieve several found FeedbackEntities',
     type: () => {
       class FeedbackEntityPage extends PageDto<FeedbackEntity> {
         @ApiProperty({
@@ -170,9 +170,9 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the deleted entity.
    */
-  @ApiOperation({ summary: 'Delete a single feedback' })
+  @ApiOperation({ summary: 'Delete a single FeedbackEntity' })
   @ApiOkResponse({
-    description: 'Retrive the deleted feedback',
+    description: 'Retrive the deleted FeedbackEntity',
     type: FeedbackEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
@@ -192,9 +192,9 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the disabled entity.
    */
-  @ApiOperation({ summary: 'Disable a single feedback' })
+  @ApiOperation({ summary: 'Disable a single FeedbackEntity' })
   @ApiOkResponse({
-    description: 'Retrive the disabled feedback',
+    description: 'Retrive the disabled FeedbackEntity',
     type: FeedbackEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
@@ -215,9 +215,9 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the enabled entity.
    */
-  @ApiOperation({ summary: 'Enable a single feedback' })
+  @ApiOperation({ summary: 'Enable a single FeedbackEntity' })
   @ApiOkResponse({
-    description: 'Retrive the enabled feedback',
+    description: 'Retrive the enabled FeedbackEntity',
     type: FeedbackEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })

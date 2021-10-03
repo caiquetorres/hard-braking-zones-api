@@ -11,4 +11,9 @@ export class AboutEntity extends BaseEntity {
     nullable: false,
   })
   text: string
+
+  constructor(partial: Partial<AboutEntity>) {
+    super()
+    Object.assign(this, partial)
+  }
 }
