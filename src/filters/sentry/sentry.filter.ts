@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common'
 import * as Sentry from '@sentry/node'
 
@@ -22,6 +23,8 @@ export class SentryFilter implements ExceptionFilter {
    * application.
    */
   private readonly sentryEnabled: boolean
+
+  private readonly logger = new Logger(SentryFilter.name)
 
   constructor(envService: EnvService) {
     this.sentryEnabled =
@@ -48,20 +51,25 @@ export class SentryFilter implements ExceptionFilter {
     const response = context.getResponse<Response>()
     const request = context.getRequest<Request>()
 
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR
+    const isHttpException = exception instanceof HttpException
 
-    if (status >= 500 && this.sentryEnabled) {
-      Sentry.captureException(exception)
+    const status = isHttpException
+      ? exception.getStatus()
+      : HttpStatus.INTERNAL_SERVER_ERROR
+
+    if (status >= 500) {
+      this.logger.error(exception.name, exception.stack)
+
+      if (this.sentryEnabled) {
+        Sentry.captureException(exception)
+      }
     }
 
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-      message: exception.message,
+      message: isHttpException ? exception.message : 'Internal Server Error',
     })
   }
 }
