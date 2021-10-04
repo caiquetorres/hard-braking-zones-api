@@ -14,21 +14,23 @@ import { Crud, CrudRequest, ParsedRequest } from '@nestjsx/crud'
 
 import { ApiQueryGetMany } from '../../decorators/api-query-get-many/api-query-get-many.decorator'
 import { ApiQueryGetOne } from '../../decorators/api-query-get-one/api-query-get-one.decorator'
+import { ProtectTo } from '../../decorators/protect-to/protect-to.decorator'
 
-import { AboutEntity } from './entities/about.entity'
+import { InfoEntity } from './entities/info.entity'
 
+import { RoleEnum } from '../../models/enums/role.enum'
 import { PageDto } from '../../shared/page.dto'
-import { CreateAboutDto } from './dtos/create-about.dto'
-import { UpdateAboutDto } from './dtos/update-about.dto'
+import { CreateInfoDto } from './dtos/create-info.dto'
+import { UpdateInfoDto } from './dtos/update-info.dto'
 
-import { AboutService } from './about.service'
+import { InfoService } from './info.service'
 
 /**
- * Controller that deals with routes related with the `about` entity.
+ * Controller that deals with routes related with the `info` entity.
  */
 @Crud({
   model: {
-    type: AboutEntity,
+    type: InfoEntity,
   },
   params: {
     id: {
@@ -50,10 +52,10 @@ import { AboutService } from './about.service'
     ],
   },
 })
-@ApiTags('about')
-@Controller('about')
-export class AboutController {
-  constructor(private readonly aboutService: AboutService) {}
+@ApiTags('infos')
+@Controller('infos')
+export class InfoController {
+  constructor(private readonly infoService: InfoService) {}
 
   /**
    * Method that creates a new entity based on the sent payload.
@@ -62,22 +64,23 @@ export class AboutController {
    * @param dto defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
-  @ApiOperation({ summary: 'Create a single AboutEntity' })
+  @ApiOperation({ summary: 'Create a single InfoEntity' })
   @ApiCreatedResponse({
     description: 'Retrieves the created entity',
-    type: AboutEntity,
+    type: InfoEntity,
   })
   @ApiBadRequestResponse({
     description: 'Payload sent with invalid or missing properties.',
   })
+  @ProtectTo(RoleEnum.admin)
   @Post()
   async createOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
     @Body()
-    dto: CreateAboutDto,
-  ): Promise<AboutEntity> {
-    return this.aboutService.createOne(crudRequest, dto)
+    dto: CreateInfoDto,
+  ): Promise<InfoEntity> {
+    return this.infoService.createOne(crudRequest, dto)
   }
 
   /**
@@ -86,11 +89,11 @@ export class AboutController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the found entity.
    */
-  @ApiOperation({ summary: 'Retrieve a single AboutEntity' })
+  @ApiOperation({ summary: 'Retrieve a single InfoEntity' })
   @ApiQueryGetOne()
   @ApiCreatedResponse({
-    description: 'Retrieve the found AboutEntity',
-    type: AboutEntity,
+    description: 'Retrieve the found InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -98,8 +101,8 @@ export class AboutController {
   async getOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<AboutEntity> {
-    return this.aboutService.getOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.getOne(crudRequest)
   }
 
   /**
@@ -108,19 +111,19 @@ export class AboutController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents all the found entities.
    */
-  @ApiOperation({ summary: 'Retrieve several AboutEntities' })
+  @ApiOperation({ summary: 'Retrieve several InfoEntities' })
   @ApiQueryGetMany()
   @ApiOkResponse({
-    description: 'Retrieve several found AboutEntities',
+    description: 'Retrieve several found InfoEntities',
     type: () => {
-      class AboutEntityPage extends PageDto<AboutEntity> {
+      class InfoEntityPage extends PageDto<InfoEntity> {
         @ApiProperty({
-          type: AboutEntity,
+          type: InfoEntity,
           isArray: true,
         })
-        data: AboutEntity[]
+        data: InfoEntity[]
       }
-      return AboutEntityPage
+      return InfoEntityPage
     },
   })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -128,8 +131,8 @@ export class AboutController {
   async getMany(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<PageDto<AboutEntity> | AboutEntity[]> {
-    return this.aboutService.getMany(crudRequest)
+  ): Promise<PageDto<InfoEntity> | InfoEntity[]> {
+    return this.infoService.getMany(crudRequest)
   }
 
   /**
@@ -139,24 +142,25 @@ export class AboutController {
    * @param dto defines an object that represents the new entity data.
    * @returns an object that represents the updated entity.
    */
-  @ApiOperation({ summary: 'Update a single AboutEntity' })
+  @ApiOperation({ summary: 'Update a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the updated AboutEntity',
-    type: AboutEntity,
+    description: 'Retrive the updated InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
   @ApiBadRequestResponse({
     description: 'Payload sent with invalid or missing properties.',
   })
+  @ProtectTo(RoleEnum.admin)
   @Patch(':id')
   async updateOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
     @Body()
-    dto: UpdateAboutDto,
-  ): Promise<AboutEntity> {
-    return this.aboutService.updateOne(crudRequest, dto)
+    dto: UpdateInfoDto,
+  ): Promise<InfoEntity> {
+    return this.infoService.updateOne(crudRequest, dto)
   }
 
   /**
@@ -165,19 +169,20 @@ export class AboutController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the deleted entity.
    */
-  @ApiOperation({ summary: 'Delete a single AboutEntity' })
+  @ApiOperation({ summary: 'Delete a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the deleted AboutEntity',
-    type: AboutEntity,
+    description: 'Retrive the deleted InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ProtectTo(RoleEnum.admin)
   @Delete(':id')
   async deleteOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<AboutEntity> {
-    return this.aboutService.deleteOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.deleteOne(crudRequest)
   }
 
   /**
@@ -186,20 +191,21 @@ export class AboutController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the disabled entity.
    */
-  @ApiOperation({ summary: 'Disable a single AboutEntity' })
+  @ApiOperation({ summary: 'Disable a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the disabled AboutEntity',
-    type: AboutEntity,
+    description: 'Retrive the disabled InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
   @ApiConflictResponse({ description: 'Entity already disabled' })
+  @ProtectTo(RoleEnum.admin)
   @Put(':id/disable')
   async disableOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<AboutEntity> {
-    return this.aboutService.disableOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.disableOne(crudRequest)
   }
 
   /**
@@ -208,19 +214,20 @@ export class AboutController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the enabled entity.
    */
-  @ApiOperation({ summary: 'Enable a single AboutEntity' })
+  @ApiOperation({ summary: 'Enable a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the enabled AboutEntity',
-    type: AboutEntity,
+    description: 'Retrive the enabled InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
   @ApiConflictResponse({ description: 'Entity already enabled' })
+  @ProtectTo(RoleEnum.admin)
   @Put(':id/enable')
   async enableOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<AboutEntity> {
-    return this.aboutService.enableOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.enableOne(crudRequest)
   }
 }

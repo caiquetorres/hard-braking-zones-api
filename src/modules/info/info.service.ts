@@ -8,20 +8,20 @@ import { EntityAlreadyDisabledException } from '../../exceptions/conflict/entity
 import { EntityAlreadyEnabledException } from '../../exceptions/conflict/entity-already-enabled.exception'
 import { EntityNotFoundException } from '../../exceptions/not-found/entity-not-found.exception'
 
-import { AboutEntity } from './entities/about.entity'
+import { InfoEntity } from './entities/info.entity'
 
 import { PageDto } from '../../shared/page.dto'
-import { CreateAboutDto } from './dtos/create-about.dto'
-import { UpdateAboutDto } from './dtos/update-about.dto'
+import { CreateInfoDto } from './dtos/create-info.dto'
+import { UpdateInfoDto } from './dtos/update-info.dto'
 
 /**
- * Service that deals with the `about` data.
+ * Service that deals with the `info` data.
  */
 @Injectable()
-export class AboutService extends TypeOrmCrudService<AboutEntity> {
+export class InfoService extends TypeOrmCrudService<InfoEntity> {
   constructor(
-    @InjectRepository(AboutEntity)
-    private readonly repository: Repository<AboutEntity>,
+    @InjectRepository(InfoEntity)
+    private readonly repository: Repository<InfoEntity>,
   ) {
     super(repository)
   }
@@ -35,9 +35,9 @@ export class AboutService extends TypeOrmCrudService<AboutEntity> {
    */
   async createOne(
     _crudRequest: CrudRequest,
-    dto: CreateAboutDto,
-  ): Promise<AboutEntity> {
-    return this.repository.save(new AboutEntity(dto))
+    dto: CreateInfoDto,
+  ): Promise<InfoEntity> {
+    return this.repository.save(new InfoEntity(dto))
   }
 
   /**
@@ -46,15 +46,15 @@ export class AboutService extends TypeOrmCrudService<AboutEntity> {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the found entity.
    */
-  async getOne(crudRequest: CrudRequest): Promise<AboutEntity> {
+  async getOne(crudRequest: CrudRequest): Promise<InfoEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const about = await super.getOne(crudRequest).catch(() => undefined)
-    if (!about) {
-      throw new EntityNotFoundException(id, AboutEntity)
+    const info = await super.getOne(crudRequest).catch(() => undefined)
+    if (!info) {
+      throw new EntityNotFoundException(id, InfoEntity)
     }
 
-    return about
+    return info
   }
 
   /**
@@ -65,7 +65,7 @@ export class AboutService extends TypeOrmCrudService<AboutEntity> {
    */
   async getMany(
     crudRequest: CrudRequest,
-  ): Promise<PageDto<AboutEntity> | AboutEntity[]> {
+  ): Promise<PageDto<InfoEntity> | InfoEntity[]> {
     return super.getMany(crudRequest)
   }
 
@@ -78,19 +78,19 @@ export class AboutService extends TypeOrmCrudService<AboutEntity> {
    */
   async updateOne(
     crudRequest: CrudRequest,
-    dto: UpdateAboutDto,
-  ): Promise<AboutEntity> {
+    dto: UpdateInfoDto,
+  ): Promise<InfoEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const about = await super.getOne(crudRequest).catch(() => undefined)
-    if (!about) {
-      throw new EntityNotFoundException(id, AboutEntity)
+    const info = await super.getOne(crudRequest).catch(() => undefined)
+    if (!info) {
+      throw new EntityNotFoundException(id, InfoEntity)
     }
 
     await this.repository.update(id, dto)
-    await about.reload()
+    await info.reload()
 
-    return about
+    return info
   }
 
   /**
@@ -99,17 +99,17 @@ export class AboutService extends TypeOrmCrudService<AboutEntity> {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the deleted entity.
    */
-  async deleteOne(crudRequest: CrudRequest): Promise<AboutEntity> {
+  async deleteOne(crudRequest: CrudRequest): Promise<InfoEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const about = await super.getOne(crudRequest).catch(() => undefined)
-    if (!about) {
-      throw new EntityNotFoundException(id, AboutEntity)
+    const info = await super.getOne(crudRequest).catch(() => undefined)
+    if (!info) {
+      throw new EntityNotFoundException(id, InfoEntity)
     }
 
     await this.repository.delete(id)
 
-    return about
+    return info
   }
 
   /**
@@ -118,24 +118,24 @@ export class AboutService extends TypeOrmCrudService<AboutEntity> {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the disabled entity.
    */
-  async disableOne(crudRequest: CrudRequest): Promise<AboutEntity> {
+  async disableOne(crudRequest: CrudRequest): Promise<InfoEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const about = await super.getOne(crudRequest).catch(() => undefined)
-    if (!about) {
-      throw new EntityNotFoundException(id, AboutEntity)
+    const info = await super.getOne(crudRequest).catch(() => undefined)
+    if (!info) {
+      throw new EntityNotFoundException(id, InfoEntity)
     }
 
-    if (!about.isActive) {
-      throw new EntityAlreadyDisabledException(id, AboutEntity)
+    if (!info.isActive) {
+      throw new EntityAlreadyDisabledException(id, InfoEntity)
     }
 
     await this.repository.update(id, {
       isActive: false,
     })
-    await about.reload()
+    await info.reload()
 
-    return about
+    return info
   }
 
   /**
@@ -144,23 +144,23 @@ export class AboutService extends TypeOrmCrudService<AboutEntity> {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the enabled entity.
    */
-  async enableOne(crudRequest: CrudRequest): Promise<AboutEntity> {
+  async enableOne(crudRequest: CrudRequest): Promise<InfoEntity> {
     const id = this.getParamFilters(crudRequest.parsed).id
 
-    const about = await super.getOne(crudRequest).catch(() => undefined)
-    if (!about) {
-      throw new EntityNotFoundException(id, AboutEntity)
+    const info = await super.getOne(crudRequest).catch(() => undefined)
+    if (!info) {
+      throw new EntityNotFoundException(id, InfoEntity)
     }
 
-    if (about.isActive) {
-      throw new EntityAlreadyEnabledException(id, AboutEntity)
+    if (info.isActive) {
+      throw new EntityAlreadyEnabledException(id, InfoEntity)
     }
 
     await this.repository.update(id, {
       isActive: true,
     })
-    await about.reload()
+    await info.reload()
 
-    return about
+    return info
   }
 }

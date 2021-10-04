@@ -3,8 +3,8 @@ import { Column, Entity } from 'typeorm'
 
 import { BaseEntity } from '../../../shared/base.entity'
 
-@Entity('about')
-export class AboutEntity extends BaseEntity {
+@Entity('info')
+export class InfoEntity extends BaseEntity {
   @ApiProperty()
   @Column({
     type: 'text',
@@ -12,7 +12,7 @@ export class AboutEntity extends BaseEntity {
   })
   text: string
 
-  constructor(partial: Partial<AboutEntity>) {
+  constructor(partial: Partial<InfoEntity>) {
     super()
     Object.assign(this, partial)
   }
