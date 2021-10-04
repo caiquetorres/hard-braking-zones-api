@@ -84,6 +84,22 @@ export class InfoController {
   }
 
   /**
+   * Method that searches for default entity.
+   *
+   * @returns an object that represents the found entity.
+   */
+  @ApiOperation({ summary: 'Retrieve the default InfoEntity' })
+  @ApiCreatedResponse({
+    description: 'Retrieve the found InfoEntity',
+    type: InfoEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @Get('default')
+  async getDefault(): Promise<InfoEntity> {
+    return this.infoService.getDefault()
+  }
+
+  /**
    * Method that searches for one entity based on it id.
    *
    * @param crudRequest defines an object that represents the sent request.

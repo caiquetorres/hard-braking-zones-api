@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CrudRequest } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
@@ -38,6 +38,25 @@ export class InfoService extends TypeOrmCrudService<InfoEntity> {
     dto: CreateInfoDto,
   ): Promise<InfoEntity> {
     return this.repository.save(new InfoEntity(dto))
+  }
+
+  /**
+   * Method that searches for default entity.
+   *
+   * @returns an object that represents the found entity.
+   */
+  async getDefault(): Promise<InfoEntity> {
+    const info = await this.repository.findOne({
+      where: {
+        isActive: true,
+      },
+    })
+
+    if (!info) {
+      throw new NotFoundException('There is no info entity')
+    }
+
+    return info
   }
 
   /**
