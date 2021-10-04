@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { EnvService } from '../../../env/services/env.service'
+import { EnvService } from '../../../env/env.service'
 
 import { IInfluxModuleOptionsFactory } from '../../../influx/interfaces/influx-module-options-factory.interface'
 import { IInfluxModuleOptions } from '../../../influx/interfaces/influx-module-options.interface'

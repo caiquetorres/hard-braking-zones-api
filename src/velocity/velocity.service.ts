@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 
-import { CreateVelocityDto } from '../dtos/create-velocity.dto'
+import { CreateVelocityDto } from './dtos/create-velocity.dto'
 
-import { InfluxService } from '../../influx/services/influx.service'
+import { InfluxService } from '../influx/influx.service'
 
 /**
  * Service that deals with the velocity data.

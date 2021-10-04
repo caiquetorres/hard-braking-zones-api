@@ -7,7 +7,7 @@ import { NestFactory, Reflector } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { CrudRequestInterceptor } from '@nestjsx/crud'
 
-import { EnvService } from './env/services/env.service'
+import { EnvService } from './env/env.service'
 
 import { AppModule } from './app.module'
 import { SentryFilter } from './common/filters/sentry/sentry.filter'

@@ -4,15 +4,15 @@ import { CrudRequest } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
-import { EntityAlreadyDisabledException } from '../../common/exceptions/conflict/entity-already-disabled.exception'
-import { EntityAlreadyEnabledException } from '../../common/exceptions/conflict/entity-already-enabled.exception'
-import { EntityNotFoundException } from '../../common/exceptions/not-found/entity-not-found.exception'
+import { EntityAlreadyDisabledException } from '../common/exceptions/conflict/entity-already-disabled.exception'
+import { EntityAlreadyEnabledException } from '../common/exceptions/conflict/entity-already-enabled.exception'
+import { EntityNotFoundException } from '../common/exceptions/not-found/entity-not-found.exception'
 
-import { FeedbackEntity } from '../entities/feedback.entity'
+import { FeedbackEntity } from './entities/feedback.entity'
 
-import { PageDto } from '../../common/models/page.dto'
-import { CreateFeedbackDto } from '../models/create-feedback.dto'
-import { UpdateFeedbackDto } from '../models/update-feedback.dto'
+import { PageDto } from '../common/models/page.dto'
+import { CreateFeedbackDto } from './dtos/create-feedback.dto'
+import { UpdateFeedbackDto } from './dtos/update-feedback.dto'
 
 /**
  * Service that deals with the `feedback` data.

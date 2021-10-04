@@ -2,9 +2,9 @@ import { DynamicModule, Global, Module } from '@nestjs/common'
 import { Logger } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 
-import { EnvironmentVariables } from './models/environment-variables.model'
+import { EnvVariables } from './models/env-variables.model'
 
-import { EnvService } from './services/env.service'
+import { EnvService } from './env.service'
 
 import { IEnvModuleOptions } from './interfaces/env-module-options.interface'
 import { plainToClass } from 'class-transformer'
@@ -36,8 +36,8 @@ export class EnvModule {
    */
   private static validate(
     config: Record<string, unknown>,
-  ): EnvironmentVariables {
-    const validatedConfig = plainToClass(EnvironmentVariables, config, {
+  ): EnvVariables {
+    const validatedConfig = plainToClass(EnvVariables, config, {
       enableImplicitConversion: true,
     })
     const errors = validateSync(validatedConfig, {

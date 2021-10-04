@@ -7,7 +7,7 @@ import {
 
 import { CreateVelocityDto } from '../dtos/create-velocity.dto'
 
-import { VelocityService } from '../services/velocity.service'
+import { VelocityService } from '../velocity.service'
 
 /**
  * Gateway responsible for dealing with the velocity data receiving.

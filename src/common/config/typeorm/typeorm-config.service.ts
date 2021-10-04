@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm'
 
-import { EnvService } from '../../../env/services/env.service'
+import { EnvService } from '../../../env/env.service'
 
 import * as path from 'path'
 

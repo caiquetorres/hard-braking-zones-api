@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import { EnvironmentVariables } from '../models/environment-variables.model'
+import { EnvVariables } from './models/env-variables.model'
 
 /**
  * Class that represents the service that deals with the environment
@@ -10,7 +10,7 @@ import { EnvironmentVariables } from '../models/environment-variables.model'
 @Injectable()
 export class EnvService {
   constructor(
-    private readonly configService: ConfigService<EnvironmentVariables>,
+    private readonly configService: ConfigService<EnvVariables>,
   ) {}
 
   /**
@@ -19,7 +19,7 @@ export class EnvService {
    * @param key defines the variable key.
    * @returns the variable value.
    */
-  get<T extends keyof EnvironmentVariables>(key: T): EnvironmentVariables[T] {
-    return this.configService.get<EnvironmentVariables[T]>(key)
+  get<T extends keyof EnvVariables>(key: T): EnvVariables[T] {
+    return this.configService.get<EnvVariables[T]>(key)
   }
 }

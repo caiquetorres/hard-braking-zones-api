@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport'
 
 import { UserEntity } from '../../user/entities/user.entity'
 
-import { AuthService } from '../services/auth.service'
+import { AuthService } from '../auth.service'
 
 import { Strategy, IStrategyOptions } from 'passport-local'
 

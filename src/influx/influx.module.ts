@@ -1,7 +1,7 @@
 import { HttpModule } from '@nestjs/axios'
 import { DynamicModule, Global, Module, Provider } from '@nestjs/common'
 
-import { InfluxService } from './services/influx.service'
+import { InfluxService } from './influx.service'
 
 import { InfluxOptionsConstant } from './constants/module.constant'
 import { IInfluxAsyncOptions as IInfluxAsyncModuleOptions } from './interfaces/influx-async-module-options.interface'

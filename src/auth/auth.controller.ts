@@ -6,17 +6,17 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 
-import { RequestUser } from '../../common/decorators/request-user/request-user.decorator'
+import { RequestUser } from '../common/decorators/request-user/request-user.decorator'
 
-import { JwtGuard } from '../../common/guards/jwt/jwt.guard'
-import { LocalGuard } from '../../common/guards/local/local.guard'
+import { JwtGuard } from '../common/guards/jwt/jwt.guard'
+import { LocalGuard } from '../common/guards/local/local.guard'
 
-import { UserEntity } from '../../user/entities/user.entity'
+import { UserEntity } from '../user/entities/user.entity'
 
-import { LoginDto } from '../dtos/login.dto'
-import { TokenDto } from '../dtos/token.dto'
+import { LoginDto } from './dtos/login.dto'
+import { TokenDto } from './dtos/token.dto'
 
-import { AuthService } from '../services/auth.service'
+import { AuthService } from './auth.service'
 
 /**
  * Controller that deals with the authentication routes.

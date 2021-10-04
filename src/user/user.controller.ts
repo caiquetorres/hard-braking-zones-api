@@ -12,25 +12,26 @@ import {
 } from '@nestjs/swagger'
 import { Crud, CrudRequest, ParsedRequest } from '@nestjsx/crud'
 
-import { ApiQueryGetMany } from '../../common/decorators/api-query-get-many/api-query-get-many.decorator'
-import { ApiQueryGetOne } from '../../common/decorators/api-query-get-one/api-query-get-one.decorator'
-import { ProtectTo } from '../../common/decorators/protect-to/protect-to.decorator'
+import { ApiQueryGetMany } from '../common/decorators/api-query-get-many/api-query-get-many.decorator'
+import { ApiQueryGetOne } from '../common/decorators/api-query-get-one/api-query-get-one.decorator'
+import { ProtectTo } from '../common/decorators/protect-to/protect-to.decorator'
+import { RequestUser } from '../common/decorators/request-user/request-user.decorator'
 
-import { FeedbackEntity } from '../entities/feedback.entity'
+import { UserEntity } from './entities/user.entity'
 
-import { RoleEnum } from '../../common/models/enums/role.enum'
-import { PageDto } from '../../common/models/page.dto'
-import { CreateFeedbackDto } from '../models/create-feedback.dto'
-import { UpdateFeedbackDto } from '../models/update-feedback.dto'
+import { RoleEnum } from '../common/models/enums/role.enum'
+import { PageDto } from '../common/models/page.dto'
+import { CreateUserDto } from './dtos/create-user.dto'
+import { UpdateUserDto } from './dtos/update-user.dto'
 
-import { FeedbackService } from '../services/feedback.service'
+import { UserService } from './user.service'
 
 /**
- * Controller that deals with routes related with the `feedback` entity.
+ * Controller that deals with routes related with the `user` entity.
  */
 @Crud({
   model: {
-    type: FeedbackEntity,
+    type: UserEntity,
   },
   params: {
     id: {
@@ -52,10 +53,10 @@ import { FeedbackService } from '../services/feedback.service'
     ],
   },
 })
-@ApiTags('feedback')
-@Controller('feedback')
-export class FeedbackController {
-  constructor(private readonly feedbackService: FeedbackService) {}
+@ApiTags('users')
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   /**
    * Method that creates a new entity based on the sent payload.
@@ -64,10 +65,10 @@ export class FeedbackController {
    * @param dto defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
-  @ApiOperation({ summary: 'Create a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Create a single UserEntity' })
   @ApiCreatedResponse({
     description: 'Retrieves the created entity',
-    type: FeedbackEntity,
+    type: UserEntity,
   })
   @ApiBadRequestResponse({
     description: 'Payload sent with invalid or missing properties.',
@@ -77,32 +78,60 @@ export class FeedbackController {
     @ParsedRequest()
     crudRequest: CrudRequest,
     @Body()
-    dto: CreateFeedbackDto,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.createOne(crudRequest, dto)
+    dto: CreateUserDto,
+  ): Promise<UserEntity> {
+    return this.userService.createOne(crudRequest, dto)
+  }
+
+  /**
+   * Method that searches for one entity based on the request user id.
+   *
+   * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
+   * @returns an object that represents the found entity.
+   */
+  @ApiOperation({ summary: 'Retrieve the logged UserEntity' })
+  @ApiQueryGetOne()
+  @ApiOkResponse({
+    description: 'Retrieve the logged UserEntity',
+    type: UserEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
+  @Get('me')
+  async getMe(
+    @ParsedRequest()
+    crudRequest: CrudRequest,
+    @RequestUser()
+    requestUser: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.getMe(crudRequest, requestUser)
   }
 
   /**
    * Method that searches for one entity based on it id.
    *
    * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the found entity.
    */
-  @ApiOperation({ summary: 'Retrieve a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Retrieve a single UserEntity' })
   @ApiQueryGetOne()
-  @ApiCreatedResponse({
-    description: 'Retrieve the found FeedbackEntity',
-    type: FeedbackEntity,
+  @ApiOkResponse({
+    description: 'Retrieve the found UserEntity',
+    type: UserEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
-  @ProtectTo(RoleEnum.admin)
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Get(':id')
   async getOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.getOne(crudRequest)
+    @RequestUser()
+    requestUser: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.getOne(crudRequest, requestUser)
   }
 
   /**
@@ -111,19 +140,19 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents all the found entities.
    */
-  @ApiOperation({ summary: 'Retrieve several FeedbackEntities' })
+  @ApiOperation({ summary: 'Retrieve several UserEntities' })
   @ApiQueryGetMany()
   @ApiOkResponse({
-    description: 'Retrieve several found FeedbackEntities',
+    description: 'Retrieve several found UserEntities',
     type: () => {
-      class FeedbackEntityPage extends PageDto<FeedbackEntity> {
+      class UserEntityPage extends PageDto<UserEntity> {
         @ApiProperty({
-          type: FeedbackEntity,
+          type: UserEntity,
           isArray: true,
         })
-        data: FeedbackEntity[]
+        data: UserEntity[]
       }
-      return FeedbackEntityPage
+      return UserEntityPage
     },
   })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -132,8 +161,8 @@ export class FeedbackController {
   async getMany(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<PageDto<FeedbackEntity> | FeedbackEntity[]> {
-    return this.feedbackService.getMany(crudRequest)
+  ): Promise<PageDto<UserEntity> | UserEntity[]> {
+    return this.userService.getMany(crudRequest)
   }
 
   /**
@@ -141,84 +170,94 @@ export class FeedbackController {
    *
    * @param crudRequest defines an object that represents the sent request.
    * @param dto defines an object that represents the new entity data.
+   * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the updated entity.
    */
-  @ApiOperation({ summary: 'Update a single feedback' })
+  @ApiOperation({ summary: 'Update a single user' })
   @ApiOkResponse({
-    description: 'Retrive the updated feedback',
-    type: FeedbackEntity,
+    description: 'Retrive the updated user',
+    type: UserEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
   @ApiBadRequestResponse({
     description: 'Payload sent with invalid or missing properties.',
   })
-  @ProtectTo(RoleEnum.admin)
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Patch(':id')
   async updateOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
     @Body()
-    dto: UpdateFeedbackDto,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.updateOne(crudRequest, dto)
+    dto: UpdateUserDto,
+    @RequestUser()
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.updateOne(crudRequest, dto, requestUser)
   }
 
   /**
    * Method that deletes entity data.
    *
    * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the deleted entity.
    */
-  @ApiOperation({ summary: 'Delete a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Delete a single user' })
   @ApiOkResponse({
-    description: 'Retrive the deleted FeedbackEntity',
-    type: FeedbackEntity,
+    description: 'Retrive the deleted user',
+    type: UserEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
-  @ProtectTo(RoleEnum.admin)
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Delete(':id')
   async deleteOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.deleteOne(crudRequest)
+    @RequestUser()
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.deleteOne(crudRequest, requestUser)
   }
 
   /**
    * Method that disables entity data.
    *
    * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the disabled entity.
    */
-  @ApiOperation({ summary: 'Disable a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Disable a single user' })
   @ApiOkResponse({
-    description: 'Retrive the disabled FeedbackEntity',
-    type: FeedbackEntity,
+    description: 'Retrive the disabled user',
+    type: UserEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
   @ApiConflictResponse({ description: 'Entity already disabled' })
-  @ProtectTo(RoleEnum.admin)
+  @ProtectTo(RoleEnum.common, RoleEnum.admin)
   @Put(':id/disable')
   async disableOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.disableOne(crudRequest)
+    @RequestUser()
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.disableOne(crudRequest, requestUser)
   }
 
   /**
    * Method that enables entity data.
    *
    * @param crudRequest defines an object that represents the sent request.
+   * @param requestUser defines an object that represents the logged user.
    * @returns an object that represents the enabled entity.
    */
-  @ApiOperation({ summary: 'Enable a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Enable a single user' })
   @ApiOkResponse({
-    description: 'Retrive the enabled FeedbackEntity',
-    type: FeedbackEntity,
+    description: 'Retrive the enabled user',
+    type: UserEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -228,7 +267,9 @@ export class FeedbackController {
   async enableOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.enableOne(crudRequest)
+    @RequestUser()
+    requestUser?: UserEntity,
+  ): Promise<UserEntity> {
+    return this.userService.enableOne(crudRequest, requestUser)
   }
 }

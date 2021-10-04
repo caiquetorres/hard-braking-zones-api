@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { VelocityService } from './services/velocity.service'
+import { VelocityService } from './velocity.service'
 
 import { VelocityGateway } from './gateways/velocity.gateway'
 

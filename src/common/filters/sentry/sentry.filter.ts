@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common'
 import * as Sentry from '@sentry/node'
 
-import { EnvService } from '../../../env/services/env.service'
+import { EnvService } from '../../../env/env.service'
 
 import { Request, Response } from 'express'
 

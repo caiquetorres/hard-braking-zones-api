@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 
-import { UserEntity } from '../../user/entities/user.entity'
+import { UserEntity } from '../user/entities/user.entity'
 
-import { RoleEnum } from '../../common/models/enums/role.enum'
+import { RoleEnum } from '../common/models/enums/role.enum'
 
 /**
  * The class that represents the service that deals with the permissions.

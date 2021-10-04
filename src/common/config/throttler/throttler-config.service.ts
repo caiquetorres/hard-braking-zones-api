@@ -4,7 +4,7 @@ import {
   ThrottlerOptionsFactory,
 } from '@nestjs/throttler'
 
-import { EnvService } from '../../../env/services/env.service'
+import { EnvService } from '../../../env/env.service'
 
 /**
  * Service deals with the throttler configuration.

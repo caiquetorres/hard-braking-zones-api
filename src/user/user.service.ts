@@ -4,20 +4,20 @@ import { CrudRequest } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
-import { EntityAlreadyDisabledException } from '../../common/exceptions/conflict/entity-already-disabled.exception'
-import { EntityAlreadyEnabledException } from '../../common/exceptions/conflict/entity-already-enabled.exception'
-import { ForbiddenException } from '../../common/exceptions/forbidden/forbidden.exception'
-import { EntityNotFoundException } from '../../common/exceptions/not-found/entity-not-found.exception'
+import { EntityAlreadyDisabledException } from '../common/exceptions/conflict/entity-already-disabled.exception'
+import { EntityAlreadyEnabledException } from '../common/exceptions/conflict/entity-already-enabled.exception'
+import { ForbiddenException } from '../common/exceptions/forbidden/forbidden.exception'
+import { EntityNotFoundException } from '../common/exceptions/not-found/entity-not-found.exception'
 
-import { UserEntity } from '../entities/user.entity'
+import { UserEntity } from './entities/user.entity'
 
-import { RoleEnum } from '../../common/models/enums/role.enum'
-import { PageDto } from '../../common/models/page.dto'
-import { CreateUserDto } from '../models/create-user.dto'
-import { UpdateUserDto } from '../models/update-user.dto'
+import { RoleEnum } from '../common/models/enums/role.enum'
+import { PageDto } from '../common/models/page.dto'
+import { CreateUserDto } from './dtos/create-user.dto'
+import { UpdateUserDto } from './dtos/update-user.dto'
 
-import { PasswordService } from '../../password/services/password.service'
-import { PermissionService } from '../../permission/services/permission.service'
+import { PasswordService } from '../password/password.service'
+import { PermissionService } from '../permission/permission.service'
 
 /**
  * Service that deals with the `user` data.

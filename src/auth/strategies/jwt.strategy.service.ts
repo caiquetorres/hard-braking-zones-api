@@ -3,8 +3,8 @@ import { PassportStrategy } from '@nestjs/passport'
 
 import { UserEntity } from '../../user/entities/user.entity'
 
-import { EnvService } from '../../env/services/env.service'
-import { AuthService } from '../services/auth.service'
+import { EnvService } from '../../env/env.service'
+import { AuthService } from '../auth.service'
 
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
 

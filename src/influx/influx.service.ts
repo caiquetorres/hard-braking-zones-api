@@ -1,15 +1,15 @@
 import { HttpService } from '@nestjs/axios'
 import { BadRequestException, Inject, Injectable, Logger } from '@nestjs/common'
 
-import { EnvService } from '../../env/services/env.service'
+import { EnvService } from '../env/env.service'
 
-import { InfluxOptionsConstant } from '../constants/module.constant'
-import { IInfluxModuleOptions } from '../interfaces/influx-module-options.interface'
+import { InfluxOptionsConstant } from './constants/module.constant'
+import { IInfluxModuleOptions } from './interfaces/influx-module-options.interface'
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
 import { interval, lastValueFrom } from 'rxjs'
 
 /**
- * Service that deals with the InfluxDB connection, writing and quering
+ * Service that deals with the InfluxDB connection, writing and querying
  * behaviours.
  */
 @Injectable()

@@ -1,14 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
-import { UserEntity } from '../../user/entities/user.entity'
+import { UserEntity } from '../user/entities/user.entity'
 
-import { LoginDto } from '../dtos/login.dto'
-import { TokenDto } from '../dtos/token.dto'
+import { LoginDto } from './dtos/login.dto'
+import { TokenDto } from './dtos/token.dto'
 
-import { EnvService } from '../../env/services/env.service'
-import { PasswordService } from '../../password/services/password.service'
-import { UserService } from '../../user/services/user.service'
+import { EnvService } from '../env/env.service'
+import { PasswordService } from '../password/password.service'
+import { UserService } from '../user/user.service'
 
 /**
  * Service that deals with all the application authentication logic.
