@@ -12,25 +12,25 @@ import {
 } from '@nestjs/swagger'
 import { Crud, CrudRequest, ParsedRequest } from '@nestjsx/crud'
 
-import { ApiQueryGetMany } from '../../../decorators/api-query-get-many/api-query-get-many.decorator'
-import { ApiQueryGetOne } from '../../../decorators/api-query-get-one/api-query-get-one.decorator'
-import { ProtectTo } from '../../../decorators/protect-to/protect-to.decorator'
+import { ApiQueryGetMany } from '../../decorators/api-query-get-many/api-query-get-many.decorator'
+import { ApiQueryGetOne } from '../../decorators/api-query-get-one/api-query-get-one.decorator'
+import { ProtectTo } from '../../decorators/protect-to/protect-to.decorator'
 
-import { FeedbackEntity } from '../entities/feedback.entity'
+import { InfoEntity } from './entities/info.entity'
 
-import { RoleEnum } from '../../../models/enums/role.enum'
-import { PageDto } from '../../../shared/page.dto'
-import { CreateFeedbackDto } from '../models/create-feedback.dto'
-import { UpdateFeedbackDto } from '../models/update-feedback.dto'
+import { RoleEnum } from '../../models/enums/role.enum'
+import { PageDto } from '../../shared/page.dto'
+import { CreateInfoDto } from './dtos/create-info.dto'
+import { UpdateInfoDto } from './dtos/update-info.dto'
 
-import { FeedbackService } from '../services/feedback.service'
+import { InfoService } from './info.service'
 
 /**
- * Controller that deals with routes related with the `feedback` entity.
+ * Controller that deals with routes related with the `info` entity.
  */
 @Crud({
   model: {
-    type: FeedbackEntity,
+    type: InfoEntity,
   },
   params: {
     id: {
@@ -52,10 +52,10 @@ import { FeedbackService } from '../services/feedback.service'
     ],
   },
 })
-@ApiTags('feedback')
-@Controller('feedback')
-export class FeedbackController {
-  constructor(private readonly feedbackService: FeedbackService) {}
+@ApiTags('infos')
+@Controller('infos')
+export class InfoController {
+  constructor(private readonly infoService: InfoService) {}
 
   /**
    * Method that creates a new entity based on the sent payload.
@@ -64,22 +64,39 @@ export class FeedbackController {
    * @param dto defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
-  @ApiOperation({ summary: 'Create a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Create a single InfoEntity' })
   @ApiCreatedResponse({
     description: 'Retrieves the created entity',
-    type: FeedbackEntity,
+    type: InfoEntity,
   })
   @ApiBadRequestResponse({
     description: 'Payload sent with invalid or missing properties.',
   })
+  @ProtectTo(RoleEnum.admin)
   @Post()
   async createOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
     @Body()
-    dto: CreateFeedbackDto,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.createOne(crudRequest, dto)
+    dto: CreateInfoDto,
+  ): Promise<InfoEntity> {
+    return this.infoService.createOne(crudRequest, dto)
+  }
+
+  /**
+   * Method that searches for default entity.
+   *
+   * @returns an object that represents the found entity.
+   */
+  @ApiOperation({ summary: 'Retrieve the default InfoEntity' })
+  @ApiCreatedResponse({
+    description: 'Retrieve the found InfoEntity',
+    type: InfoEntity,
+  })
+  @ApiNotFoundResponse({ description: 'Entity not found' })
+  @Get('default')
+  async getDefault(): Promise<InfoEntity> {
+    return this.infoService.getDefault()
   }
 
   /**
@@ -88,11 +105,11 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the found entity.
    */
-  @ApiOperation({ summary: 'Retrieve a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Retrieve a single InfoEntity' })
   @ApiQueryGetOne()
   @ApiCreatedResponse({
-    description: 'Retrieve the found FeedbackEntity',
-    type: FeedbackEntity,
+    description: 'Retrieve the found InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -101,8 +118,8 @@ export class FeedbackController {
   async getOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.getOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.getOne(crudRequest)
   }
 
   /**
@@ -111,19 +128,19 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents all the found entities.
    */
-  @ApiOperation({ summary: 'Retrieve several FeedbackEntities' })
+  @ApiOperation({ summary: 'Retrieve several InfoEntities' })
   @ApiQueryGetMany()
   @ApiOkResponse({
-    description: 'Retrieve several found FeedbackEntities',
+    description: 'Retrieve several found InfoEntities',
     type: () => {
-      class FeedbackEntityPage extends PageDto<FeedbackEntity> {
+      class InfoEntityPage extends PageDto<InfoEntity> {
         @ApiProperty({
-          type: FeedbackEntity,
+          type: InfoEntity,
           isArray: true,
         })
-        data: FeedbackEntity[]
+        data: InfoEntity[]
       }
-      return FeedbackEntityPage
+      return InfoEntityPage
     },
   })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -132,8 +149,8 @@ export class FeedbackController {
   async getMany(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<PageDto<FeedbackEntity> | FeedbackEntity[]> {
-    return this.feedbackService.getMany(crudRequest)
+  ): Promise<PageDto<InfoEntity> | InfoEntity[]> {
+    return this.infoService.getMany(crudRequest)
   }
 
   /**
@@ -143,10 +160,10 @@ export class FeedbackController {
    * @param dto defines an object that represents the new entity data.
    * @returns an object that represents the updated entity.
    */
-  @ApiOperation({ summary: 'Update a single feedback' })
+  @ApiOperation({ summary: 'Update a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the updated feedback',
-    type: FeedbackEntity,
+    description: 'Retrive the updated InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -159,9 +176,9 @@ export class FeedbackController {
     @ParsedRequest()
     crudRequest: CrudRequest,
     @Body()
-    dto: UpdateFeedbackDto,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.updateOne(crudRequest, dto)
+    dto: UpdateInfoDto,
+  ): Promise<InfoEntity> {
+    return this.infoService.updateOne(crudRequest, dto)
   }
 
   /**
@@ -170,10 +187,10 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the deleted entity.
    */
-  @ApiOperation({ summary: 'Delete a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Delete a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the deleted FeedbackEntity',
-    type: FeedbackEntity,
+    description: 'Retrive the deleted InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -182,8 +199,8 @@ export class FeedbackController {
   async deleteOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.deleteOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.deleteOne(crudRequest)
   }
 
   /**
@@ -192,10 +209,10 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the disabled entity.
    */
-  @ApiOperation({ summary: 'Disable a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Disable a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the disabled FeedbackEntity',
-    type: FeedbackEntity,
+    description: 'Retrive the disabled InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -205,8 +222,8 @@ export class FeedbackController {
   async disableOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.disableOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.disableOne(crudRequest)
   }
 
   /**
@@ -215,10 +232,10 @@ export class FeedbackController {
    * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the enabled entity.
    */
-  @ApiOperation({ summary: 'Enable a single FeedbackEntity' })
+  @ApiOperation({ summary: 'Enable a single InfoEntity' })
   @ApiOkResponse({
-    description: 'Retrive the enabled FeedbackEntity',
-    type: FeedbackEntity,
+    description: 'Retrive the enabled InfoEntity',
+    type: InfoEntity,
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
@@ -228,7 +245,7 @@ export class FeedbackController {
   async enableOne(
     @ParsedRequest()
     crudRequest: CrudRequest,
-  ): Promise<FeedbackEntity> {
-    return this.feedbackService.enableOne(crudRequest)
+  ): Promise<InfoEntity> {
+    return this.infoService.enableOne(crudRequest)
   }
 }
