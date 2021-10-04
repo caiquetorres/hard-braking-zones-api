@@ -97,6 +97,7 @@ export class InfoController {
   })
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ProtectTo(RoleEnum.admin)
   @Get(':id')
   async getOne(
     @ParsedRequest()
@@ -127,6 +128,7 @@ export class InfoController {
     },
   })
   @ApiForbiddenResponse({ description: 'Request user has no permissions' })
+  @ProtectTo(RoleEnum.admin)
   @Get()
   async getMany(
     @ParsedRequest()
