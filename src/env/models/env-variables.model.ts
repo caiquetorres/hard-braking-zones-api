@@ -62,13 +62,13 @@ export class EnvVariables {
 
   //#region Influx
 
-  @IsDefined({ message: 'It is required to set the influx user' })
+  @IsOptional()
   @IsString({ message: 'It is required to set a valid string value' })
-  INFLUXDB_USER: string
+  INFLUXDB_USER?: string
 
-  @IsDefined({ message: 'It is required to set the influx password' })
+  @IsOptional()
   @IsString({ message: 'It is required to set a valid string value' })
-  INFLUXDB_USER_PASSWORD: string
+  INFLUXDB_USER_PASSWORD?: string
 
   @IsDefined({ message: 'It is required to set the influx org' })
   @IsString({ message: 'It is required to set a valid string value' })
@@ -82,14 +82,14 @@ export class EnvVariables {
   @IsString({ message: 'It is required to set a valid string value' })
   INFLUXDB_MEASUREMENT_NAME: string
 
-  @IsDefined({ message: 'It is required to set the influx password' })
+  @IsOptional()
   @IsNumber(
     { maxDecimalPlaces: 0 },
     { message: 'It is required to set a valid number value' },
   )
-  INFLUXDB_PORT: number
+  INFLUXDB_PORT?: number
 
-  @IsDefined({ message: 'It is required to set the influx host' })
+  @IsOptional()
   @IsString({ message: 'It is required to set a valid string value' })
   INFLUXDB_HOST: string
 
