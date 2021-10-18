@@ -45,4 +45,4 @@ switch (process.env.DATABASE_TYPE) {
     )
 }
 
-export default options
+module.exports = options
