@@ -22,7 +22,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "ci": "rm -rf node_modules && yarn"
+    "ci": "rm -rf node_modules && yarn",
+    "deploy:heroku": "git push heroku master -f"
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.17.0",
