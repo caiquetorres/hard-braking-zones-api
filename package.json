@@ -23,6 +23,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ci": "rm -rf node_modules && yarn",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ormconfig.js",
+    "typeorm:migrate": "npm run typeorm migration:generate -- -d src/migrations -n",
+    "typeorm:run": "npm run typeorm migration:run",
     "deploy:heroku": "git push heroku master -f"
   },
   "dependencies": {
