@@ -1,19 +1,20 @@
-import { SkipThrottle } from '@nestjs/throttler'
+import { Logger } from '@nestjs/common'
 import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets'
 
-import { CreateVelocityDto } from '../dtos/create-velocity.dto'
+import { CreateVelocityDto } from './dtos/create-velocity.dto'
 
-import { VelocityService } from '../velocity.service'
+import { VelocityService } from './velocity.service'
 
 /**
  * Gateway responsible for dealing with the velocity data receiving.
  */
-@SkipThrottle()
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: true,
+})
 export class VelocityGateway {
   constructor(private readonly velocityService: VelocityService) {}
 
@@ -27,6 +28,7 @@ export class VelocityGateway {
     @MessageBody()
     dto: CreateVelocityDto,
   ): Promise<void> {
-    this.velocityService.createOne(dto)
+    Logger.debug(dto)
+    // this.velocityService.createOne(dto)
   }
 }

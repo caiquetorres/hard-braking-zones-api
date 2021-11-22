@@ -9,9 +9,7 @@ import { EnvVariables } from './models/env-variables.model'
  */
 @Injectable()
 export class EnvService {
-  constructor(
-    private readonly configService: ConfigService<EnvVariables>,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   /**
    * Method that gets some environment variable value based on the `key`.
