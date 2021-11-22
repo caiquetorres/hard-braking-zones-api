@@ -84,6 +84,5 @@ function setupSwagger(app: INestApplication, env: EnvService): void {
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
-
   SwaggerModule.setup(`swagger`, app, document)
 }
