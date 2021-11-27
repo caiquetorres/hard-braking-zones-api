@@ -12,12 +12,20 @@ export class CreateVelocityDto {
   deviceId: string
 
   @ApiProperty()
-  @IsDefined({ message: 'It is required to send the latitude' })
+  @IsDefined({ message: 'It is required to send the speed' })
   @IsNumber(
     { maxDecimalPlaces: 4 },
     { message: 'It is required to send a valid number' },
   )
-  velocity: string
+  speed: string
+
+  @ApiProperty()
+  @IsDefined({ message: 'It is required to send the accuracy' })
+  @IsNumber(
+    { maxDecimalPlaces: 4 },
+    { message: 'It is required to send a valid number' },
+  )
+  accuracy: string
 
   @ApiProperty()
   @IsDefined({ message: 'It is required to send the longitude' })
