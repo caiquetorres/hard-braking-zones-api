@@ -7,7 +7,7 @@ import { EnvVariables } from './models/env-variables.model'
 import { EnvService } from './env.service'
 
 import { IEnvModuleOptions } from './interfaces/env-module-options.interface'
-import { plainToInstance } from 'class-transformer'
+import { plainToClass } from 'class-transformer'
 import { validateSync } from 'class-validator'
 
 @Global()
@@ -35,7 +35,7 @@ export class EnvModule {
    * @returns an object that represents the variables and it values.
    */
   private static validate(config: Record<string, unknown>): EnvVariables {
-    const validatedConfig = plainToInstance(EnvVariables, config, {
+    const validatedConfig = plainToClass(EnvVariables, config, {
       enableImplicitConversion: true,
     })
     const errors = validateSync(validatedConfig, {
