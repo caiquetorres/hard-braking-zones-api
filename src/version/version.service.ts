@@ -2,17 +2,14 @@ import { Injectable } from '@nestjs/common'
 
 import { KeyValueEntity } from '../key-value/entities/key-value.entity'
 
-import { CreateInfoDto } from './dtos/create-info.dto'
-import { UpdateInfoDto } from './dtos/update-info.dto'
+import { CreateVersionDto } from './dtos/create-version.dto'
+import { UpdateVersionDto } from './dtos/update-version.dto'
 
 import { KeyValueService } from '../key-value/key-value.service'
 
-/**
- * Service that deals with the `info` data.
- */
 @Injectable()
-export class InfoService {
-  private readonly infoKey = 'info'
+export class VersionService {
+  private readonly versionKey = 'version'
 
   constructor(private readonly keyValueService: KeyValueService) {}
 
@@ -22,10 +19,10 @@ export class InfoService {
    * @param dto defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
-  async createOne(dto: CreateInfoDto): Promise<KeyValueEntity> {
+  async createOne(dto: CreateVersionDto): Promise<KeyValueEntity> {
     return this.keyValueService.createOne({
-      key: this.infoKey,
-      value: dto.text,
+      key: this.versionKey,
+      value: JSON.stringify(dto),
     })
   }
 
@@ -35,7 +32,7 @@ export class InfoService {
    * @returns an object that represents the found entity.
    */
   async getOne(): Promise<KeyValueEntity> {
-    return this.keyValueService.getOne(this.infoKey)
+    return this.keyValueService.getOne(this.versionKey)
   }
 
   /**
@@ -44,9 +41,9 @@ export class InfoService {
    * @param dto defines an object that represents the new entity data.
    * @returns an object that represents the updated entity.
    */
-  async updateOne(dto: UpdateInfoDto): Promise<KeyValueEntity> {
-    return this.keyValueService.updateOne(this.infoKey, {
-      value: dto.text,
+  async updateOne(dto: UpdateVersionDto): Promise<KeyValueEntity> {
+    return this.keyValueService.updateOne(this.versionKey, {
+      value: JSON.stringify(dto),
     })
   }
 
@@ -56,6 +53,6 @@ export class InfoService {
    * @returns an object that represents the deleted entity.
    */
   async deleteOne(): Promise<KeyValueEntity> {
-    return this.keyValueService.deleteOne(this.infoKey)
+    return this.keyValueService.deleteOne(this.versionKey)
   }
 }

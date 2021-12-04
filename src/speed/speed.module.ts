@@ -6,6 +6,5 @@ import { SpeedGateway } from './speed.gateway'
 
 @Module({
   providers: [SpeedService, SpeedGateway],
-  exports: [SpeedService],
 })
 export class SpeedModule {}

@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common'
 import {
-  ApiBadRequestResponse,
+  ApiOperation,
   ApiCreatedResponse,
-  ApiForbiddenResponse,
+  ApiBadRequestResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiOperation,
+  ApiForbiddenResponse,
   ApiTags,
 } from '@nestjs/swagger'
 
@@ -14,18 +14,18 @@ import { ProtectTo } from '../common/decorators/protect-to/protect-to.decorator'
 import { KeyValueEntity } from '../key-value/entities/key-value.entity'
 
 import { RoleEnum } from '../common/models/enums/role.enum'
-import { CreateInfoDto } from './dtos/create-info.dto'
-import { UpdateInfoDto } from './dtos/update-info.dto'
+import { CreateVersionDto } from './dtos/create-version.dto'
+import { UpdateVersionDto } from './dtos/update-version.dto'
 
-import { InfoService } from './info.service'
+import { VersionService } from './version.service'
 
 /**
- * Controller that deals with routes related with the `info` data.
+ * Controller that deals with routes related with the `version` data.
  */
-@ApiTags('info')
-@Controller('info')
-export class InfoController {
-  constructor(private readonly infoService: InfoService) {}
+@ApiTags('version')
+@Controller('version')
+export class VersionController {
+  constructor(private readonly versionService: VersionService) {}
 
   /**
    * Method that creates a new entity based on the sent payload.
@@ -45,9 +45,9 @@ export class InfoController {
   @Post()
   async createOne(
     @Body()
-    dto: CreateInfoDto,
+    dto: CreateVersionDto,
   ): Promise<KeyValueEntity> {
-    return this.infoService.createOne(dto)
+    return this.versionService.createOne(dto)
   }
 
   /**
@@ -63,7 +63,7 @@ export class InfoController {
   @ApiNotFoundResponse({ description: 'Entity not found' })
   @Get()
   async getOne(): Promise<KeyValueEntity> {
-    return this.infoService.getOne()
+    return this.versionService.getOne()
   }
 
   /**
@@ -86,9 +86,9 @@ export class InfoController {
   @Patch()
   async updateOne(
     @Body()
-    dto: UpdateInfoDto,
+    dto: UpdateVersionDto,
   ): Promise<KeyValueEntity> {
-    return this.infoService.updateOne(dto)
+    return this.versionService.updateOne(dto)
   }
 
   /**
@@ -106,6 +106,6 @@ export class InfoController {
   @ProtectTo(RoleEnum.admin)
   @Delete()
   async deleteOne(): Promise<KeyValueEntity> {
-    return this.infoService.deleteOne()
+    return this.versionService.deleteOne()
   }
 }
