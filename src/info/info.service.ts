@@ -12,6 +12,8 @@ import { KeyValueService } from '../key-value/key-value.service'
  */
 @Injectable()
 export class InfoService {
+  private readonly infoKey = 'info'
+
   constructor(private readonly keyValueService: KeyValueService) {}
 
   /**
@@ -22,7 +24,7 @@ export class InfoService {
    */
   async createOne(dto: CreateInfoDto): Promise<KeyValueEntity> {
     return this.keyValueService.createOne({
-      key: 'info',
+      key: this.infoKey,
       value: dto.text,
     })
   }
@@ -33,7 +35,7 @@ export class InfoService {
    * @returns an object that represents the found entity.
    */
   async getOne(): Promise<KeyValueEntity> {
-    return this.keyValueService.getOne('info')
+    return this.keyValueService.getOne(this.infoKey)
   }
 
   /**
@@ -43,7 +45,7 @@ export class InfoService {
    * @returns an object that represents the updated entity.
    */
   async updateOne(dto: UpdateInfoDto): Promise<KeyValueEntity> {
-    return this.keyValueService.updateOne('info', {
+    return this.keyValueService.updateOne(this.infoKey, {
       value: dto.text,
     })
   }
@@ -54,6 +56,6 @@ export class InfoService {
    * @returns an object that represents the deleted entity.
    */
   async deleteOne(): Promise<KeyValueEntity> {
-    return this.keyValueService.deleteOne('info')
+    return this.keyValueService.deleteOne(this.infoKey)
   }
 }
