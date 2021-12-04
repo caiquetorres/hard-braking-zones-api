@@ -10,25 +10,25 @@ import { CreateSpeedDto } from './dtos/create-speed.dto'
 import { SpeedService } from './speed.service'
 
 /**
- * Gateway responsible for dealing with the speed data receiving.
+ * Gateway responsible for dealing with the velocity data receiving.
  */
 @WebSocketGateway({
   cors: true,
 })
 export class SpeedGateway {
-  constructor(private readonly speedService: SpeedService) {}
+  constructor(private readonly velocityService: SpeedService) {}
 
   /**
-   * Method that creates a new speed point in the influx database.
+   * Method that creates a new velocity point in the influx database.
    *
    * @param dto defines an object that has the point data
    */
   @UsePipes(new ValidationPipe())
   @SubscribeMessage('speed')
-  async handleSpeed(
+  async handleVelocity(
     @MessageBody()
     dto: CreateSpeedDto,
   ): Promise<void> {
-    this.speedService.createOne(dto)
+    this.velocityService.createOne(dto)
   }
 }
