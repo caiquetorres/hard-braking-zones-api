@@ -22,6 +22,7 @@ import { PasswordModule } from './password/password.module'
 import { PermissionModule } from './permission/permission.module'
 import { SpeedModule } from './speed/speed.module'
 import { UserModule } from './user/user.module'
+import { VersionModule } from './version/version.module'
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UserModule } from './user/user.module'
     SpeedModule,
     FeedbackModule,
     InfoModule,
+    VersionModule,
     EnvModule.forRoot({
       envFilePath: ['.env'],
     }),
