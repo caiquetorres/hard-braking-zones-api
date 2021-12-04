@@ -8,7 +8,6 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
-import { Crud } from '@nestjsx/crud'
 
 import { ProtectTo } from '../common/decorators/protect-to/protect-to.decorator'
 
@@ -21,32 +20,8 @@ import { UpdateInfoDto } from './dtos/update-info.dto'
 import { InfoService } from './info.service'
 
 /**
- * Controller that deals with routes related with the `info` entity.
+ * Controller that deals with routes related with the `info` data.
  */
-@Crud({
-  model: {
-    type: KeyValueEntity,
-  },
-  params: {
-    id: {
-      field: 'id',
-      type: 'uuid',
-      primary: true,
-    },
-  },
-  routes: {
-    exclude: [
-      'createManyBase',
-      'createOneBase',
-      'deleteOneBase',
-      'getOneBase',
-      'getManyBase',
-      'recoverOneBase',
-      'replaceOneBase',
-      'updateOneBase',
-    ],
-  },
-})
 @ApiTags('info')
 @Controller('info')
 export class InfoController {
@@ -55,7 +30,6 @@ export class InfoController {
   /**
    * Method that creates a new entity based on the sent payload.
    *
-   * @param crudRequest defines an object that represents the sent request.
    * @param dto defines an object that has the entity data.
    * @returns an object that represents the created entity.
    */
@@ -95,7 +69,6 @@ export class InfoController {
   /**
    * Method that updates some entity data.
    *
-   * @param crudRequest defines an object that represents the sent request.
    * @param dto defines an object that represents the new entity data.
    * @returns an object that represents the updated entity.
    */
@@ -121,7 +94,6 @@ export class InfoController {
   /**
    * Method that deletes entity data.
    *
-   * @param crudRequest defines an object that represents the sent request.
    * @returns an object that represents the deleted entity.
    */
   @ApiOperation({ summary: 'Delete a single KeyValueEntity' })
