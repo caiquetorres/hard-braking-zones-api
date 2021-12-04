@@ -2,6 +2,7 @@ import {
   ClassSerializerInterceptor,
   INestApplication,
   ValidationPipe,
+  VersioningType,
 } from '@nestjs/common'
 import { NestFactory, Reflector } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
@@ -24,6 +25,11 @@ async function bootstrap(): Promise<void> {
   setupSwagger(app, envService)
 
   app.enableCors()
+
+  app.enableVersioning({
+    defaultVersion: '1',
+    type: VersioningType.URI,
+  })
 
   await app.listen(envService.get('PORT') || 3000)
 }
