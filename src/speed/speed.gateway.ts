@@ -1,3 +1,4 @@
+import { UsePipes, ValidationPipe } from '@nestjs/common'
 import {
   MessageBody,
   SubscribeMessage,
@@ -22,7 +23,8 @@ export class SpeedGateway {
    *
    * @param dto defines an object that has the point data
    */
-  @SubscribeMessage('velocity')
+  @UsePipes(new ValidationPipe())
+  @SubscribeMessage('speed')
   async handleVelocity(
     @MessageBody()
     dto: CreateSpeedDto,
