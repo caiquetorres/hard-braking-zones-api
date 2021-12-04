@@ -3,9 +3,11 @@ import { Column, Entity } from 'typeorm'
 
 import { BaseEntity } from '../../common/models/base.entity'
 
+import { Exclude } from 'class-transformer'
+
 @Entity('key_value')
 export class KeyValueEntity extends BaseEntity {
-  @ApiProperty()
+  @Exclude()
   @Column({
     nullable: false,
     type: 'varchar',
