@@ -20,8 +20,9 @@ import { InfoModule } from './info/info.module'
 import { KeyValueModule } from './key-value/key-value.module'
 import { PasswordModule } from './password/password.module'
 import { PermissionModule } from './permission/permission.module'
+import { SpeedModule } from './speed/speed.module'
 import { UserModule } from './user/user.module'
-import { VelocityModule } from './velocity/velocity.module'
+import { VersionModule } from './version/version.module'
 
 @Module({
   imports: [
@@ -30,9 +31,10 @@ import { VelocityModule } from './velocity/velocity.module'
     AuthModule,
     PermissionModule,
     UserModule,
-    VelocityModule,
+    SpeedModule,
     FeedbackModule,
     InfoModule,
+    VersionModule,
     EnvModule.forRoot({
       envFilePath: ['.env'],
     }),
