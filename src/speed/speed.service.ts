@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { CreateVelocityDto } from './dtos/create-velocity.dto'
+import { CreateSpeedDto } from './dtos/create-speed.dto'
 
 import { InfluxService } from '../influx/influx.service'
 
@@ -8,7 +8,7 @@ import { InfluxService } from '../influx/influx.service'
  * Service that deals with the velocity data.
  */
 @Injectable()
-export class VelocityService {
+export class SpeedService {
   constructor(private readonly influxService: InfluxService) {}
 
   /**
@@ -16,7 +16,7 @@ export class VelocityService {
    *
    * @param payload defines an object that has the point data
    */
-  createOne(payload: CreateVelocityDto): Promise<void> {
+  createOne(payload: CreateSpeedDto): Promise<void> {
     return this.influxService.createOne(payload)
   }
 }
