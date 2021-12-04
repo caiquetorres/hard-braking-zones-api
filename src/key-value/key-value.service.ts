@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { ConflictException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
@@ -24,8 +24,16 @@ export class KeyValueService {
    * @returns an object that represents the created entity.
    */
   async createOne(dto: CreateKeyValueDto): Promise<KeyValueEntity> {
-    const user = new KeyValueEntity(dto)
-    return this.repository.save(user)
+    const keyValue = new KeyValueEntity(dto)
+
+    const hasKeyValueWithKey = await this.repository.findOne({ key: dto.key })
+    if (hasKeyValueWithKey) {
+      throw new ConflictException(
+        'An key-value with this key was already registered',
+      )
+    }
+
+    return this.repository.save(keyValue)
   }
 
   /**

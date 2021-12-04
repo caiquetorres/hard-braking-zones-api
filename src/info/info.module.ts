@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-
-import { InfoEntity } from './entities/info.entity'
 
 import { InfoService } from './info.service'
 
 import { InfoController } from './info.controller'
 
+import { KeyValueModule } from '../key-value/key-value.module'
+
 @Module({
-  imports: [TypeOrmModule.forFeature([InfoEntity])],
+  imports: [KeyValueModule],
   controllers: [InfoController],
   providers: [InfoService],
 })
