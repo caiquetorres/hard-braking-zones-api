@@ -17,6 +17,7 @@ import { EnvModule } from './env/env.module'
 import { FeedbackModule } from './feedback/feedback.module'
 import { InfluxModule } from './influx/influx.module'
 import { InfoModule } from './info/info.module'
+import { KeyValueModule } from './key-value/key-value.module'
 import { PasswordModule } from './password/password.module'
 import { PermissionModule } from './permission/permission.module'
 import { UserModule } from './user/user.module'
@@ -25,6 +26,7 @@ import { VelocityModule } from './velocity/velocity.module'
 @Module({
   imports: [
     PasswordModule,
+    KeyValueModule,
     AuthModule,
     PermissionModule,
     UserModule,
