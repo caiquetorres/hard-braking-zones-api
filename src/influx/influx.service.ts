@@ -100,15 +100,20 @@ export class InfluxService {
    */
   private createPoint(value: any): Point {
     const point = new Point(this.envService.get('INFLUXDB_MEASUREMENT_NAME'))
+
     for (const key in value) {
-      if (typeof value[key] === 'boolean') {
-        point.booleanField(key, value[key])
-      } else if (typeof value[key] === 'number') {
-        point.floatField(key, value[key])
-      } else if (typeof value[key] === 'string') {
-        point.stringField(key, value[key])
-      } else {
-        throw new BadRequestException('Data type not valid.')
+      switch (typeof value[key]) {
+        case 'boolean':
+          point.booleanField(key, value[key])
+          break
+        case 'number':
+          point.floatField(key, value[key])
+          break
+        case 'string':
+          point.stringField(key, value[key])
+          break
+        default:
+          throw new BadRequestException('Data type not valid.')
       }
     }
     return point

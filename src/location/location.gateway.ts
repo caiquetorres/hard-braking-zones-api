@@ -5,9 +5,9 @@ import {
   WebSocketGateway,
 } from '@nestjs/websockets'
 
-import { CreateSpeedDto } from './dtos/create-speed.dto'
+import { CreateLocationDto } from './dtos/create-location.dto'
 
-import { SpeedService } from './speed.service'
+import { LocationService } from './location.service'
 
 /**
  * Gateway responsible for dealing with the velocity data receiving.
@@ -15,8 +15,8 @@ import { SpeedService } from './speed.service'
 @WebSocketGateway({
   cors: true,
 })
-export class SpeedGateway {
-  constructor(private readonly velocityService: SpeedService) {}
+export class LocationGateway {
+  constructor(private readonly velocityService: LocationService) {}
 
   /**
    * Method that creates a new velocity point in the influx database.
@@ -24,10 +24,10 @@ export class SpeedGateway {
    * @param dto defines an object that has the point data
    */
   @UsePipes(new ValidationPipe())
-  @SubscribeMessage('speed')
-  async handleVelocity(
+  @SubscribeMessage('location')
+  async handleLocation(
     @MessageBody()
-    dto: CreateSpeedDto,
+    dto: CreateLocationDto,
   ): Promise<void> {
     this.velocityService.createOne(dto)
   }
