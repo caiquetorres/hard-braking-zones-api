@@ -21,7 +21,6 @@ import { KeyValueModule } from './key-value/key-value.module'
 import { LocationModule } from './location/location.module'
 import { PasswordModule } from './password/password.module'
 import { PermissionModule } from './permission/permission.module'
-import { UploadModule } from './upload/upload.module'
 import { UserModule } from './user/user.module'
 import { VersionModule } from './version/version.module'
 
@@ -36,7 +35,6 @@ import { VersionModule } from './version/version.module'
     FeedbackModule,
     InfoModule,
     VersionModule,
-    UploadModule,
     EnvModule.forRoot({
       envFilePath: ['.env'],
     }),
