@@ -14,9 +14,19 @@ export class LocationService {
   /**
    * Method that creates a new location point in the influx database.
    *
-   * @param payload defines an object that has the point data
+   * @param payload defines an object that represents the point data
    */
   createOne(payload: CreateLocationDto): Promise<void> {
     return this.influxService.createOne(payload)
+  }
+
+  /**
+   * Method that creates new location points in the influx database.
+   *
+   * @param payload defines an array that contains objects and each one of
+   * them represents the the point data
+   */
+  createMany(payload: CreateLocationDto[]) {
+    return this.influxService.createMany(payload)
   }
 }
