@@ -9,6 +9,9 @@ import { KeyValueService } from '../key-value/key-value.service'
 
 @Injectable()
 export class VersionService {
+  /**
+   * Property that defines the key that represents the `version` data.
+   */
   private readonly versionKey = 'version'
 
   constructor(private readonly keyValueService: KeyValueService) {}
