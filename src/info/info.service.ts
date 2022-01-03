@@ -12,6 +12,9 @@ import { KeyValueService } from '../key-value/key-value.service'
  */
 @Injectable()
 export class InfoService {
+  /**
+   * Property that defines the key that represents the `info` data.
+   */
   private readonly infoKey = 'info'
 
   constructor(private readonly keyValueService: KeyValueService) {}
