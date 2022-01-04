@@ -32,7 +32,7 @@
     "deploy:heroku": "git push heroku master -f"
   },
   "dependencies": {
-    "@influxdata/influxdb-client": "^1.17.0",
+    "@influxdata/influxdb-client": "^1.21.0",
     "@nestjs/axios": "^0.0.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.0.1",

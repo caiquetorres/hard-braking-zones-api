@@ -550,7 +550,7 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@influxdata/influxdb-client@^1.17.0":
+"@influxdata/influxdb-client@^1.21.0":
   version "1.21.0"
   resolved "https://registry.yarnpkg.com/@influxdata/influxdb-client/-/influxdb-client-1.21.0.tgz#4d0f10db42daabf84bfa7e58ef22732ff692ad9d"
   integrity sha512-QdugX4vGFAqO43rTMfPxR4VUrEttXk6X3mZT+edcVOmIXKiJqlg4WCj7eBxJMayAs7RqDIDWRGJVGz7OC497PA==
