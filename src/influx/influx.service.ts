@@ -46,6 +46,7 @@ export class InfluxService {
       this.envService.get('INFLUXDB_ORG'),
       this.envService.get('INFLUXDB_BUCKET'),
     )
+    writeApi.writePoints
     writeApi.writePoint(this.createPoint(value))
     await writeApi.close()
   }
@@ -57,9 +58,12 @@ export class InfluxService {
    * point datas.
    */
   async createMany<T>(values: T[]): Promise<void> {
-    for (const value of values) {
-      await this.createOne(value)
-    }
+    const writeApi = this.influx.getWriteApi(
+      this.envService.get('INFLUXDB_ORG'),
+      this.envService.get('INFLUXDB_BUCKET'),
+    )
+    writeApi.writePoints(values.map((point) => this.createPoint(point)))
+    await writeApi.close()
   }
 
   /**
