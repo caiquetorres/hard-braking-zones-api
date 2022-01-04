@@ -16,7 +16,7 @@ import { LocationService } from './location.service'
   cors: true,
 })
 export class LocationGateway {
-  constructor(private readonly velocityService: LocationService) {}
+  constructor(private readonly locationService: LocationService) {}
 
   /**
    * Method that creates a new velocity point in the influx database.
@@ -29,6 +29,6 @@ export class LocationGateway {
     @MessageBody()
     dto: CreateLocationDto,
   ): Promise<void> {
-    this.velocityService.createOne(dto)
+    this.locationService.createOne(dto)
   }
 }
