@@ -17,7 +17,7 @@ export class CreateLocationDto {
     { maxDecimalPlaces: 4 },
     { message: 'It is required to send a valid number' },
   )
-  speed: string
+  speed: number
 
   @ApiProperty()
   @IsDefined({ message: 'It is required to send the accuracy' })
@@ -25,7 +25,7 @@ export class CreateLocationDto {
     { maxDecimalPlaces: 4 },
     { message: 'It is required to send a valid number' },
   )
-  accuracy: string
+  accuracy: number
 
   @ApiProperty()
   @IsDefined({ message: 'It is required to send the longitude' })
