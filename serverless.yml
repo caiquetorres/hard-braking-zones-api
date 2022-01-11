@@ -1,0 +1,33 @@
+org: caiquetorres
+app: hard-braking-zones
+service:
+  name: main
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  stage: prod
+  runtime: nodejs14.x
+
+package:
+  exclude:
+    - .git/**
+    - src/**
+    - test/**
+    - e2e/**
+    - README.md
+
+functions:
+  main:
+    handler: dist/lambda.handler
+    events:
+      - http:
+          cors: true
+          method: ANY
+          path: /
+      - http:
+          cors: true
+          method: ANY
+          path: '{proxy+}'
