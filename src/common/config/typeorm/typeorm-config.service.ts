@@ -51,10 +51,12 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
           host: this.envService.get('DATABASE_HOST'),
           username: this.envService.get('DATABASE_USERNAME'),
           password: this.envService.get('DATABASE_PASSWORD'),
-          ssl: this.envService.get('DATABASE_SSL'),
           synchronize: this.envService.get('DATABASE_SYNCHRONIZE'),
           migrationsRun: this.envService.get('DATABASE_MIGRATIONS_RUN'),
           entities: [entitiesPath],
+          ssl: {
+            rejectUnauthorized: false,
+          },
         }
     }
   }
