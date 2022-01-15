@@ -14,10 +14,25 @@ provider:
 package:
   exclude:
     - .git/**
+    - .husky/**
     - src/**
     - test/**
     - e2e/**
     - README.md
+    - .env*
+    - .eslint*
+    - .commitlintrc.json
+    - .editorconfig
+    - .nvmrc
+    - docker-compose.yml
+    - Procfile
+    - .prettierrc
+    - yarn.lock
+    - package.json
+    - tsconfig.json
+    - tsconfig.build.json
+    - nest-cli.json
+    - ormconfig.js
 
 functions:
   main:
