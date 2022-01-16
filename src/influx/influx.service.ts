@@ -8,6 +8,10 @@ import { IInfluxModuleOptions } from './interfaces/influx-module-options.interfa
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
 import { interval, lastValueFrom } from 'rxjs'
 
+interface Timestamp {
+  timestamp: Date
+}
+
 /**
  * Service that deals with the InfluxDB connection, writing and querying
  * behaviours.
@@ -41,12 +45,11 @@ export class InfluxService {
    * @param value defines the new point data.
    * @returns an observable related to the created point.
    */
-  async createOne<T>(value: T): Promise<void> {
+  async createOne<T extends Timestamp>(value: T): Promise<void> {
     const writeApi = this.influx.getWriteApi(
       this.envService.get('INFLUXDB_ORG'),
       this.envService.get('INFLUXDB_BUCKET'),
     )
-    writeApi.writePoints
     writeApi.writePoint(this.createPoint(value))
     await writeApi.close()
   }
@@ -57,7 +60,7 @@ export class InfluxService {
    * @param values defines an array of objects that represents the new
    * point datas.
    */
-  async createMany<T>(values: T[]): Promise<void> {
+  async createMany<T extends Timestamp>(values: T[]): Promise<void> {
     const writeApi = this.influx.getWriteApi(
       this.envService.get('INFLUXDB_ORG'),
       this.envService.get('INFLUXDB_BUCKET'),
@@ -102,19 +105,22 @@ export class InfluxService {
    * @param value defines the new poisnt data.
    * @returns the created point.
    */
-  private createPoint(value: any): Point {
+  private createPoint<T extends Timestamp>(value: T): Point {
     const point = new Point(this.envService.get('INFLUXDB_MEASUREMENT_NAME'))
 
-    for (const key in value) {
-      switch (typeof value[key]) {
+    const { timestamp, ...rest } = value
+    point.timestamp(timestamp)
+
+    for (const key in rest) {
+      switch (typeof rest[key]) {
         case 'boolean':
-          point.booleanField(key, value[key])
+          point.booleanField(key, rest[key])
           break
         case 'number':
-          point.floatField(key, value[key])
+          point.floatField(key, rest[key])
           break
         case 'string':
-          point.stringField(key, value[key])
+          point.stringField(key, rest[key])
           break
         default:
           throw new BadRequestException('Data type not valid.')
