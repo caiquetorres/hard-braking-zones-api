@@ -9,7 +9,7 @@ import { InfluxDB, Point } from '@influxdata/influxdb-client'
 import { interval, lastValueFrom } from 'rxjs'
 
 interface Timestamp {
-  timestamp: Date
+  timestamp: number
 }
 
 /**
@@ -109,7 +109,7 @@ export class InfluxService {
     const point = new Point(this.envService.get('INFLUXDB_MEASUREMENT_NAME'))
 
     const { timestamp, ...rest } = value
-    point.timestamp(timestamp)
+    point.timestamp(new Date(timestamp))
 
     for (const key in rest) {
       switch (typeof rest[key]) {

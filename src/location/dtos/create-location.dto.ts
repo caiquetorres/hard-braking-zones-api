@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-import { IsDate, IsDefined, IsNumber, IsString } from 'class-validator'
+import { IsDefined, IsNumber, IsString } from 'class-validator'
 
 /**
  * Dto that represents the data sent to the backend to perform the create.
@@ -8,8 +8,8 @@ import { IsDate, IsDefined, IsNumber, IsString } from 'class-validator'
 export class CreateLocationDto {
   @ApiProperty()
   @IsDefined({ message: 'It is required to send the timestamp' })
-  @IsDate({ message: 'It is required to send a valid date' })
-  timestamp: Date
+  @IsNumber({}, { message: 'It is required to send a valid timestamp' })
+  timestamp: number
 
   @ApiProperty()
   @IsDefined({ message: 'It is required to send the deviceId' })
