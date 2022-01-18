@@ -8,7 +8,6 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger'
-import { SkipThrottle } from '@nestjs/throttler'
 
 import { ApiFile } from '../common/decorators/api-file/api-file.decorator'
 
@@ -45,7 +44,6 @@ export class LocationController {
   })
   @ApiConsumes('multipart/form-data')
   @ApiFile('file')
-  @SkipThrottle()
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async save(
