@@ -20,3 +20,8 @@ services:
       POSTGRES_DB: ${DATABASE_DATABASE}
     ports:
       - ${DATABASE_PORT}:5432
+
+  redis:
+    image: redis
+    ports:
+      - ${REDIS_PORT}:5432
