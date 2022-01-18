@@ -1,3 +1,4 @@
+import { InjectQueue } from '@nestjs/bull'
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import {
@@ -15,7 +16,7 @@ import { FileValidationPipe } from '../common/pipes/file-validation/file-validat
 
 import { CreateLocationDto } from './dtos/create-location.dto'
 
-import { LocationService } from './location.service'
+import { Queue } from 'bull'
 
 /**
  * Controller that deals with routes related with the `location` data.
@@ -23,8 +24,10 @@ import { LocationService } from './location.service'
 @ApiTags('locations')
 @Controller('locations')
 export class LocationController {
-  constructor(private readonly locationService: LocationService) {}
-
+  constructor(
+    @InjectQueue('location')
+    private readonly queue: Queue,
+  ) {}
   /**
    * Method that saves all data obtained from the device while it was
    * without internet connection.
@@ -47,8 +50,10 @@ export class LocationController {
   @UseInterceptors(FileInterceptor('file'))
   async save(
     @UploadedFile(new FileValidationPipe(CreateLocationDto))
-    locations: CreateLocationDto[],
+    dtos: CreateLocationDto[],
   ): Promise<void> {
-    return this.locationService.createMany(locations)
+    for await (const dto of dtos) {
+      this.queue.add(dto)
+    }
   }
 }

@@ -26,7 +26,7 @@ export class LocationService {
    * @param payload defines an array that contains objects and each one of
    * them represents the the point data
    */
-  createMany(payload: CreateLocationDto[]) {
+  createMany(payload: CreateLocationDto[]): Promise<void> {
     return this.influxService.createMany(payload)
   }
 }

@@ -13,6 +13,11 @@ import { EnvService } from './env/env.service'
 import { AppModule } from './app.module'
 import { SentryFilter } from './common/filters/sentry/sentry.filter'
 
+/**
+ * Function that creates a `Nest` application.
+ *
+ * @returns an object that represents the application.
+ */
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule)
 
