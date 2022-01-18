@@ -6,7 +6,7 @@ import { IInfluxModuleOptionsFactory } from '../../../influx/interfaces/influx-m
 import { IInfluxModuleOptions } from '../../../influx/interfaces/influx-module-options.interface'
 
 /**
- * Service deals with the influx configuration.
+ * Service deals with the `influx` configuration.
  */
 @Injectable()
 export class InfluxConfigService implements IInfluxModuleOptionsFactory {
