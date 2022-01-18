@@ -36,7 +36,7 @@ export class EnvVariables {
 
   //#endregion
 
-  //#region
+  //#region JWT
 
   @IsDefined({ message: 'It is required to set the jwt secret' })
   @IsString({ message: 'It is required to set a valid string value' })
@@ -150,6 +150,25 @@ export class EnvVariables {
   @IsOptional()
   @IsBoolean({ message: 'It is required to send a boolean value' })
   DATABASE_SSL?: boolean
+
+  //#endregion
+
+  //#region Redis
+
+  @IsDefined({ message: 'It is required to set the "REDIS_HOST"' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  REDIS_HOST: string
+
+  @IsDefined({ message: 'It is required to set the "REDIS_PORT"' })
+  @IsNumber(
+    { maxDecimalPlaces: 0 },
+    { message: 'It is required to set a valid number value' },
+  )
+  REDIS_PORT?: number
+
+  @IsDefined({ message: 'It is required to set the "REDIS_PASSWORD"' })
+  @IsString({ message: 'It is required to set a valid string value' })
+  REDIS_PASSWORD?: string
 
   //#endregion
 
