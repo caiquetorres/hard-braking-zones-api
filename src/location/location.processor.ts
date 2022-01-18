@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common'
 
 import { CreateLocationDto } from './dtos/create-location.dto'
 
+import { EnvService } from '../env/env.service'
 import { LocationService } from './location.service'
 
 import { Job } from 'bull'
@@ -18,7 +19,18 @@ export class LocationProcessor {
    */
   private locations: CreateLocationDto[] = []
 
-  constructor(private readonly locationService: LocationService) {}
+  /**
+   * Property that defines the data amount that must be sent to the influx
+   * database.
+   */
+  private readonly maxCount: number
+
+  constructor(
+    envService: EnvService,
+    private readonly locationService: LocationService,
+  ) {
+    this.maxCount = envService.get('LOCATIONS_MAX_COUNT')
+  }
 
   /**
    * Method that saves some location in the peding `locations` array. After
@@ -31,7 +43,7 @@ export class LocationProcessor {
     this.locations.push(job.data)
     Logger.debug(this.locations.length) // TODO: Remove this line after AWS/Heroku tests
 
-    if (this.locations.length === 100) {
+    if (this.locations.length === this.maxCount) {
       Logger.debug('Saving locations') // TODO: Remove this line after AWS/Heroku tests
       await this.locationService.createMany(this.locations)
       this.locations = []

@@ -203,4 +203,15 @@ export class EnvVariables {
   SENTRY_DSN?: string
 
   //#endregion
+
+  //#region Locations
+
+  @IsDefined({ message: 'It is required to set the "LOCATIONS_MAX_COUNT"' })
+  @IsNumber(
+    { maxDecimalPlaces: 0 },
+    { message: 'It is required to set a valid number value' },
+  )
+  LOCATIONS_MAX_COUNT: number
+
+  //#endregion
 }
