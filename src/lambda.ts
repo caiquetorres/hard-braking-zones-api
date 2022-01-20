@@ -12,7 +12,6 @@ async function bootstrap(): Promise<Handler> {
   const expressApp = app.getHttpAdapter().getInstance()
   return serverlessExpress({ app: expressApp })
 }
-bootstrap()
 
 /**
  * Funtion that is used by the serverless to run the application in the
