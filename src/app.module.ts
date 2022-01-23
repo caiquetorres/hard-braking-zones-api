@@ -1,5 +1,4 @@
 import { HttpModule } from '@nestjs/axios'
-import { BullModule } from '@nestjs/bull'
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { ThrottlerModule } from '@nestjs/throttler'
@@ -7,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { RateLimitGuard } from './common/guards/rate-limit/rate-limit.guard'
 
-import { BullConfigService } from './common/config/bull/bull-config.service'
 import { HttpConfigService } from './common/config/http/http-config.service'
 import { InfluxConfigService } from './common/config/influx/influx-config.service'
 import { ThrottlerConfigService } from './common/config/throttler/throttler-config.service'
@@ -51,9 +49,6 @@ import { VersionModule } from './version/version.module'
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
-    }),
-    BullModule.forRootAsync({
-      useClass: BullConfigService,
     }),
   ],
   providers: [
