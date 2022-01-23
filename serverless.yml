@@ -1,10 +1,6 @@
 org: caiquetorres
 app: hard-braking-zones
-service:
-  name: main
-
-plugins:
-  - serverless-offline
+service: api
 
 provider:
   name: aws
@@ -35,8 +31,9 @@ package:
     - ormconfig.js
 
 functions:
-  main:
+  api:
     handler: dist/lambda.handler
+    name: hard-braking-zones-api-${sls:stage}
     events:
       - http:
           cors: true

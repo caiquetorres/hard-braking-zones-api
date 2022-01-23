@@ -153,25 +153,6 @@ export class EnvVariables {
 
   //#endregion
 
-  //#region Redis
-
-  @IsDefined({ message: 'It is required to set the "REDIS_HOST"' })
-  @IsString({ message: 'It is required to set a valid string value' })
-  REDIS_HOST: string
-
-  @IsDefined({ message: 'It is required to set the "REDIS_PORT"' })
-  @IsNumber(
-    { maxDecimalPlaces: 0 },
-    { message: 'It is required to set a valid number value' },
-  )
-  REDIS_PORT?: number
-
-  @IsDefined({ message: 'It is required to set the "REDIS_PASSWORD"' })
-  @IsString({ message: 'It is required to set a valid string value' })
-  REDIS_PASSWORD?: string
-
-  //#endregion
-
   //#region Swagger
 
   @IsDefined({ message: 'It is required to set the swagger title' })
@@ -201,17 +182,6 @@ export class EnvVariables {
   @IsOptional()
   @IsString({ message: 'It is required to set a valid string' })
   SENTRY_DSN?: string
-
-  //#endregion
-
-  //#region Locations
-
-  @IsDefined({ message: 'It is required to set the "LOCATIONS_MAX_COUNT"' })
-  @IsNumber(
-    { maxDecimalPlaces: 0 },
-    { message: 'It is required to set a valid number value' },
-  )
-  LOCATIONS_MAX_COUNT: number
 
   //#endregion
 }
