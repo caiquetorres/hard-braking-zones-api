@@ -2,72 +2,83 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## **Description**
 
-## Description
+The project consists of an app capable of recording the speed and position of the user 24 hours a day, in order to find, through an AI, hard braking zones in the city.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Written with Typescript the backend provides the necessary data for the <a href="https://github.com/caiquetorres/hard-braking-zones-app">application frontend</a>.
 
-## Installation
+<hr />
+
+## **Getting started**
+
+First you must to clone the repository using:
 
 ```bash
-$ npm install
+$ git clone 'https://github.com/caiquetorres/hard-braking-zones-api.git'
 ```
 
-## Running the app
+After that install all the required dependencies with:
+
+```bash
+$ yarn global add @nestjs/cli
+
+$ yarn add
+```
+
+This project uses <strong>husky's commit-msg hook</strong>. For using it run the following commands:
+
+```bash
+$ npx husky install
+
+$ npx husky add .husky/commit-msg 'npx --no-install commitlint --edit $1'
+```
+
+<hr />
+
+## **Running the app**
 
 ```bash
 # development
-$ npm run start
+$ nest start
 
 # watch mode
-$ npm run start:dev
+$ nest start --watch
 
 # production mode
-$ npm run start:prod
+$ nest start --prod
 ```
 
-## Test
+<hr />
+
+## **Docker**
+
+The application uses Docker for running some examples of databases.
+
+> Obs: Using the ".env.{database}.example" files you can copy the configuration found in them and place it in the ".env" file.
+
+For using Postgres
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ sudo docker-compose up -d posgres
 ```
 
-## Support
+For using InfluxDB
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+$ sudo docker-compose up -d influxdb
+```
 
-## Stay in touch
+<hr />
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## **Sentry**
 
-## License
+The app is also integrated with <a href="https://sentry.io/">Sentry</a>, allowing you to track exceptions and store them.
 
-Nest is [MIT licensed](LICENSE).
+<hr>
+
+## **License**
+
+Hard Braking Zones API is [MIT licensed](LICENSE).
