@@ -18,9 +18,9 @@ import { FeedbackModule } from './feedback/feedback.module'
 import { InfluxModule } from './influx/influx.module'
 import { InfoModule } from './info/info.module'
 import { KeyValueModule } from './key-value/key-value.module'
-import { LocationModule } from './location/location.module'
 import { PasswordModule } from './password/password.module'
 import { PermissionModule } from './permission/permission.module'
+import { PointModule } from './point/point.module'
 import { UserModule } from './user/user.module'
 import { VersionModule } from './version/version.module'
 
@@ -31,7 +31,7 @@ import { VersionModule } from './version/version.module'
     AuthModule,
     PermissionModule,
     UserModule,
-    LocationModule,
+    PointModule,
     FeedbackModule,
     InfoModule,
     VersionModule,

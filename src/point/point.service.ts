@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { CreateLocationDto } from './dtos/create-location.dto'
+import { CreatePointDto } from './dtos/create-point.dto'
 
 import { InfluxService } from '../influx/influx.service'
 
@@ -8,7 +8,7 @@ import { InfluxService } from '../influx/influx.service'
  * Service that deals with the location data.
  */
 @Injectable()
-export class LocationService {
+export class PointService {
   constructor(private readonly influxService: InfluxService) {}
 
   /**
@@ -17,7 +17,7 @@ export class LocationService {
    * @param payload defines an array that contains objects and each one of
    * them represents the the point data
    */
-  createMany(payload: CreateLocationDto[]): Promise<void> {
+  createMany(payload: CreatePointDto[]): Promise<void> {
     return this.influxService.createMany(payload)
   }
 }

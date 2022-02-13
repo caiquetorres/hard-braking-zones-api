@@ -5,7 +5,7 @@ import { IsDefined, IsNumber, IsString } from 'class-validator'
 /**
  * Dto that represents the data sent to the backend to perform the create.
  */
-export class CreateLocationDto {
+export class CreatePointDto {
   @ApiProperty()
   @IsDefined({ message: 'It is required to send the timestamp' })
   @IsNumber({}, { message: 'It is required to send a valid timestamp' })
@@ -41,4 +41,28 @@ export class CreateLocationDto {
   @IsDefined({ message: 'It is required to send the latitude' })
   @IsString({ message: 'It is required to send a valid string' })
   latitude: string
+
+  @ApiProperty()
+  @IsDefined({ message: 'It is required to send the acclX' })
+  @IsNumber(
+    { maxDecimalPlaces: 4 },
+    { message: 'It is required to send a valid number' },
+  )
+  acclX: number
+
+  @ApiProperty()
+  @IsDefined({ message: 'It is required to send the acclY' })
+  @IsNumber(
+    { maxDecimalPlaces: 4 },
+    { message: 'It is required to send a valid number' },
+  )
+  acclY: number
+
+  @ApiProperty()
+  @IsDefined({ message: 'It is required to send the acclZ' })
+  @IsNumber(
+    { maxDecimalPlaces: 4 },
+    { message: 'It is required to send a valid number' },
+  )
+  acclZ: number
 }
