@@ -2,7 +2,7 @@
 
 import { Injectable, Logger, PipeTransform, Type } from '@nestjs/common'
 
-import { CreateLocationDto } from '../../../location/dtos/create-location.dto'
+import { CreatePointDto } from '../../../point/dtos/create-point.dto'
 
 import { plainToClass } from 'class-transformer'
 import { validateSync } from 'class-validator'
@@ -27,7 +27,7 @@ export class FileValidationPipe implements PipeTransform {
       ...JSON.parse(value.buffer.toString()).map((location: any) =>
         this.validate(location),
       ),
-    ] as CreateLocationDto[]
+    ] as CreatePointDto[]
   }
 
   /**
@@ -36,7 +36,7 @@ export class FileValidationPipe implements PipeTransform {
    * @param config defines an object that contains all the location data.
    * @returns an object that represents the validated location.
    */
-  private validate(config: CreateLocationDto) {
+  private validate(config: CreatePointDto) {
     const validatedConfig = plainToClass(this.type, config, {
       enableImplicitConversion: true,
     })
